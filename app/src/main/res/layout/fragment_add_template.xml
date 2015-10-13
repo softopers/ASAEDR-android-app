@@ -1,0 +1,108 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.LoginActivity">
+
+    <LinearLayout
+        android:id="@+id/api_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fffcac"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:padding="@dimen/content_padding_normal"
+            android:text="@string/no_connection_cant_load"
+            android:textSize="@dimen/text_size_medium" />
+    </LinearLayout>
+
+
+    <!-- Login progress -->
+
+    <ScrollView
+        android:id="@+id/employee_template_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/api_error">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <EditText
+                android:id="@+id/template_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="-4dp"
+                android:layout_marginRight="-4dp"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:hint="Template Name"
+                android:inputType="textCapSentences|text"
+                android:maxLength="10"
+                android:minLines="1"
+                android:scrollbars="vertical" />
+
+            <EditText
+                android:id="@+id/template_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="-4dp"
+                android:layout_marginRight="-4dp"
+                android:layout_marginTop="8dp"
+                android:gravity="top"
+                android:hint="Template Content"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLines="3"
+                android:minLines="3"
+                android:scrollbars="vertical"
+                android:singleLine="false" />
+
+            <FrameLayout
+                android:id="@+id/submit_button"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/theme_primary"
+                android:clickable="true"
+                android:contentDescription="@string/employee_register_submitlink"
+                android:focusable="true"
+                android:foreground="?photoItemForeground">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableLeft="@drawable/ic_submit"
+                    android:drawablePadding="8dp"
+                    android:fontFamily="@string/font_fontFamily_medium"
+                    android:gravity="center_vertical"
+                    android:paddingRight="20dp"
+                    android:text="@string/employee_register_submitlink"
+                    android:textAllCaps="true"
+                    android:textColor="#fff"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold" />
+            </FrameLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/template_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone" />
+</RelativeLayout>

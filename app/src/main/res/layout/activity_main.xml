@@ -1,0 +1,45 @@
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <!-- Main layout -->
+    <com.softopers.asaedr.widget.DrawShadowFrameLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        app:shadowDrawable="@drawable/header_shadow">
+
+        <!-- Main fragment showing the list -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/headerbar"
+                style="@style/HeaderBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:orientation="vertical">
+
+                <include layout="@layout/toolbar_actionbar" />
+                <!-- placeholder, empty except on L -->
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </com.softopers.asaedr.widget.DrawShadowFrameLayout>
+
+    <!-- Nav drawer -->
+    <include layout="@layout/navdrawer" />
+
+</android.support.v4.widget.DrawerLayout>

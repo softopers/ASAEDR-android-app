@@ -1,0 +1,309 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.EmployeeRegisterActivity">
+
+    <LinearLayout
+        android:id="@+id/headerbar"
+        style="@style/HeaderBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:orientation="vertical">
+
+        <include layout="@layout/toolbar_actionbar" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <!-- Employee Register progress -->
+        <ProgressBar
+            android:id="@+id/employee_register_progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/employee_register_form"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:id="@+id/header1"
+                        style="@style/HeaderBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/explore_dropdown_item_height"
+                        android:orientation="horizontal">
+
+                        <Spinner
+                            android:id="@+id/employee_register_department"
+                            style="@style/Widget.IOSched.HeaderBar.Spinner"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+                        <Spinner
+                            android:id="@+id/employee_register_zone"
+                            style="@style/Widget.IOSched.HeaderBar.Spinner"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/HeaderBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/explore_dropdown_item_height"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/employee_register_is_admin"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="Admin" />
+
+                        <Spinner
+                            android:id="@+id/employee_register_privilage"
+                            style="@style/Widget.IOSched.HeaderBar.Spinner"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+                        <com.softopers.asaedr.widget.CircleImageView
+                            android:id="@+id/employee_register_image"
+                            android:layout_width="72dp"
+                            android:layout_height="72dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/person_image_empty" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_toEndOf="@+id/employee_register_image"
+                            android:layout_toRightOf="@+id/employee_register_image"
+                            android:orientation="vertical">
+
+                            <EditText
+                                android:id="@+id/employee_register_first_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="-4dp"
+                                android:layout_marginRight="-4dp"
+                                android:layout_marginTop="8dp"
+                                android:hint="First Name"
+                                android:inputType="textCapSentences|textPersonName"
+                                android:minLines="1"
+                                android:scrollbars="vertical" />
+
+                            <EditText
+                                android:id="@+id/employee_register_last_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="-4dp"
+                                android:layout_marginRight="-4dp"
+                                android:layout_marginTop="8dp"
+                                android:hint="Last Name"
+                                android:inputType="textCapSentences|textPersonName"
+                                android:minLines="1"
+                                android:scrollbars="vertical" />
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <EditText
+                        android:id="@+id/employee_register_mobile_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-4dp"
+                        android:layout_marginRight="-4dp"
+                        android:layout_marginTop="8dp"
+                        android:ems="10"
+                        android:hint="Mobile Number"
+                        android:inputType="phone"
+                        android:maxLength="10"
+                        android:minLines="1"
+                        android:scrollbars="vertical" />
+
+                    <EditText
+                        android:id="@+id/employee_register_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-4dp"
+                        android:layout_marginRight="-4dp"
+                        android:layout_marginTop="8dp"
+                        android:gravity="top"
+                        android:hint="Address"
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:maxLines="3"
+                        android:minLines="3"
+                        android:scrollbars="vertical"
+                        android:singleLine="false" />
+
+                    <EditText
+                        android:id="@+id/employee_register_designation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-4dp"
+                        android:layout_marginRight="-4dp"
+                        android:layout_marginTop="8dp"
+                        android:hint="Designation"
+                        android:inputType="textCapSentences"
+                        android:minLines="1"
+                        android:scrollbars="vertical" />
+
+                    <EditText
+                        android:id="@+id/employee_register_username"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-4dp"
+                        android:layout_marginRight="-4dp"
+                        android:layout_marginTop="8dp"
+                        android:hint="Username"
+                        android:inputType="textPersonName"
+                        android:minLines="1"
+                        android:scrollbars="vertical" />
+
+                    <EditText
+                        android:id="@+id/employee_register_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-4dp"
+                        android:layout_marginRight="-4dp"
+                        android:layout_marginTop="8dp"
+                        android:hint="Password"
+                        android:inputType="textPassword"
+                        android:minLines="1"
+                        android:scrollbars="vertical" />
+
+                    <EditText
+                        android:id="@+id/employee_register_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-4dp"
+                        android:layout_marginRight="-4dp"
+                        android:layout_marginTop="8dp"
+                        android:gravity="top"
+                        android:hint="Description"
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:maxLines="3"
+                        android:minLines="3"
+                        android:scrollbars="vertical"
+                        android:singleLine="false" />
+
+                    <!--<LinearLayout
+                        style="@style/HeaderBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/explore_dropdown_item_height"
+                        android:layout_marginLeft="-4dp"
+                        android:layout_marginRight="-4dp"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <Spinner
+                            android:id="@+id/employee_register_department"
+                            style="@style/Widget.IOSched.HeaderBar.Spinner"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+                        <Spinner
+                            android:id="@+id/employee_register_zone"
+                            style="@style/Widget.IOSched.HeaderBar.Spinner"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+                    </LinearLayout>-->
+
+                    <!-- <LinearLayout
+                         style="@style/HeaderBar"
+                         android:layout_width="match_parent"
+                         android:layout_height="@dimen/explore_dropdown_item_height"
+                         android:layout_marginLeft="-4dp"
+                         android:layout_marginRight="-4dp"
+                         android:layout_marginTop="8dp"
+                         android:orientation="horizontal">
+
+                         <CheckBox
+                             android:layout_width="0dp"
+                             android:layout_weight="1"
+                             android:layout_height="match_parent"
+                             android:text="Admin" />
+
+                         <Spinner
+                             android:id="@+id/employee_register_privilage"
+                             style="@style/Widget.IOSched.HeaderBar.Spinner"
+                             android:layout_width="0dp"
+                             android:layout_height="match_parent"
+                             android:layout_weight="1" />
+                     </LinearLayout>-->
+                </LinearLayout>
+
+                <!-- Submit button -->
+
+                <FrameLayout
+                    android:id="@+id/submit_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@color/theme_primary"
+                    android:clickable="true"
+                    android:contentDescription="@string/employee_register_submitlink"
+                    android:focusable="true"
+                    android:foreground="?photoItemForeground">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:drawableLeft="@drawable/ic_submit"
+                        android:drawablePadding="8dp"
+                        android:fontFamily="@string/font_fontFamily_medium"
+                        android:gravity="center_vertical"
+                        android:paddingRight="20dp"
+                        android:text="@string/employee_register_submitlink"
+                        android:textAllCaps="true"
+                        android:textColor="#fff"
+                        android:textSize="@dimen/text_size_medium"
+                        android:textStyle="bold" />
+                </FrameLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</LinearLayout>
+
+
+

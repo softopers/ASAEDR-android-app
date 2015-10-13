@@ -1,0 +1,128 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <ProgressBar
+            android:id="@+id/fragment_reporting_progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/api_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fffcac"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:padding="@dimen/content_padding_normal"
+            android:text="@string/no_connection_cant_load"
+            android:textSize="@dimen/text_size_medium" />
+
+        <Button
+            android:id="@+id/retry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/element_spacing_normal"
+            android:text="@string/retry" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mainLinear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/api_error"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/reportLinear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="vertical"
+            android:padding="@dimen/keyline_1">
+
+            <FrameLayout
+                android:id="@+id/box"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/fragment_reporting_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="top"
+                    android:hint="Report"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:maxLines="3"
+                    android:minLines="3"
+                    android:paddingRight="48dp"
+                    android:scrollbars="vertical"
+                    android:singleLine="false" />
+
+                <ImageButton
+                    android:id="@+id/fragment_reporting_template"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="right|bottom"
+                    android:background="?photoItemForeground"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_schedule_feedback" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/fragment_reporting_submit"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/theme_primary"
+                android:clickable="true"
+                android:contentDescription="@string/action_sign_in_short"
+                android:focusable="true"
+                android:foreground="?photoItemForeground">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableLeft="@drawable/ic_submit"
+                    android:drawablePadding="8dp"
+                    android:fontFamily="@string/font_fontFamily_medium"
+                    android:gravity="center_vertical"
+                    android:paddingRight="20dp"
+                    android:text="@string/employee_register_submitlink"
+                    android:textAllCaps="true"
+                    android:textColor="#fff"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/fragment_reporting_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:divider="@null"
+            android:listSelector="@android:color/transparent"
+
+            android:padding="@dimen/explore_grid_padding_half"
+            android:scrollbarStyle="outsideOverlay" />
+    </LinearLayout>
+</RelativeLayout>
