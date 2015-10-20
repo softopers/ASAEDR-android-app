@@ -32,6 +32,7 @@ import com.softopers.asaedr.model.ResponseReportingList;
 import com.softopers.asaedr.model.ResponseResult;
 import com.softopers.asaedr.ui.App;
 import com.softopers.asaedr.util.ConfigUtils;
+import com.softopers.asaedr.util.PrefUtils;
 import com.softopers.asaedr.webapi.RestAPIClientService;
 
 import java.util.ArrayList;
@@ -180,6 +181,7 @@ public class ReportingFragment extends Fragment implements AbsListView.OnScrollL
             EventBus.getDefault().register(this);
 
         RequestByIds requestByIds = new RequestByIds();
+        requestByIds.setEmpId(PrefUtils.getUser(getActivity()).getEmpId());
         requestByIds.setDayStatusId(Integer.valueOf(getArguments().getString("DayStatusId")));
         requestByIds.setPageNumber(pageNumber);
         Intent intent = new Intent(getActivity(), RestAPIClientService.class);

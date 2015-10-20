@@ -35,12 +35,13 @@ import com.softopers.asaedr.model.EmployeeRegistrationDetail;
 import com.softopers.asaedr.model.PrivilegeCategoryList;
 import com.softopers.asaedr.model.ResponseResult;
 import com.softopers.asaedr.model.User;
-import com.softopers.asaedr.model.ZoneList;
+import com.softopers.asaedr.model.UserList;
 import com.softopers.asaedr.ui.App;
 import com.softopers.asaedr.ui.BaseActivity;
 import com.softopers.asaedr.util.ConfigUtils;
 import com.softopers.asaedr.util.PrefUtils;
 import com.softopers.asaedr.webapi.RestAPIClientService;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,16 +61,17 @@ public class EmployeeRegisterActivity extends BaseActivity {
 
     View focusView = null;
     String image;
+    UserList userList;
     private Handler mHandler = new Handler();
-    private EditText employee_register_first_name, employee_register_last_name, employee_register_mobile_number, employee_register_address, employee_register_designation, employee_register_username, employee_register_password, employee_register_description;
+    private EditText employee_register_first_name, employee_register_mobile_number, employee_register_address, employee_register_designation, employee_register_username, employee_register_password, employee_register_description;
     private ImageView employee_register_image;
     private CheckBox employee_register_is_admin;
     private Uri contentUri;
-    private Spinner employee_register_privilage, employee_register_zone, employee_register_department;
+    private Spinner employee_register_privilage, employee_register_department;
     private View mProgressView;
     private View mEmployeeRegisterFormView;
-    private Integer departmentId, zoneId, privilegeCategoryId;
-    private LinearLayout header1;
+    private Integer departmentId, privilegeCategoryId;
+    private LinearLayout header1, header;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +79,6 @@ public class EmployeeRegisterActivity extends BaseActivity {
         setContentView(R.layout.activity_employee_register);
 
         employee_register_first_name = (EditText) findViewById(R.id.employee_register_first_name);
-        employee_register_last_name = (EditText) findViewById(R.id.employee_register_last_name);
         employee_register_mobile_number = (EditText) findViewById(R.id.employee_register_mobile_number);
         employee_register_address = (EditText) findViewById(R.id.employee_register_address);
         employee_register_designation = (EditText) findViewById(R.id.employee_register_designation);
@@ -89,11 +90,13 @@ public class EmployeeRegisterActivity extends BaseActivity {
 
         employee_register_is_admin = (CheckBox) findViewById(R.id.employee_register_is_admin);
 
-        employee_register_zone = (Spinner) findViewById(R.id.employee_register_zone);
         employee_register_privilage = (Spinner) findViewById(R.id.employee_register_privilage);
         employee_register_department = (Spinner) findViewById(R.id.employee_register_department);
+        employee_register_privilage.setPrompt("Select a Privilage");
+        employee_register_department.setPrompt("Select a Department");
 
         header1 = (LinearLayout) findViewById(R.id.header1);
+        header = (LinearLayout) findViewById(R.id.header);
 
         mEmployeeRegisterFormView = findViewById(R.id.employee_register_form);
 
@@ -102,22 +105,55 @@ public class EmployeeRegisterActivity extends BaseActivity {
         if (!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
 
-        showProgress(true);
+        if (getIntent().getSerializableExtra("userList") != null) {
+            employee_register_username.setEnabled(false);
+            employee_register_password.setEnabled(false);
+            header1.setVisibility(View.GONE);
+            header.setVisibility(View.GONE);
+            userList = (UserList) getIntent().getSerializableExtra("userList");
+            employee_register_first_name.setText(userList.getEmpName());
+            employee_register_mobile_number.setText(userList.getMob());
+            employee_register_address.setText(userList.getAddress());
+            employee_register_designation.setText(userList.getDesignation());
+            employee_register_description.setText(userList.getDescription());
+            employee_register_username.setText(userList.getUserName());
+            employee_register_password.setText(userList.getPassword());
+            if (!TextUtils.isEmpty(userList.getImage()))
+                Picasso.with(getApplicationContext()).load("http://app.allsportsacademy.in/Image/" + userList.getImage()).placeholder(R.drawable.person_image_empty).error(R.drawable.person_image_empty).into(employee_register_image);
+            else
+                employee_register_image.setImageResource(R.drawable.person_image_empty);
+        } else {
+            showProgress(true);
 
-        Intent intent = new Intent(this, RestAPIClientService.class);
-        intent.putExtra(RestAPIClientService.Operation.class.getName(), RestAPIClientService.Operation.EMPLOYEE_REGISTRATION_DETAILS);
-        WakefulIntentService.sendWakefulWork(this, intent);
+            Intent intent = new Intent(this, RestAPIClientService.class);
+            intent.putExtra(RestAPIClientService.Operation.class.getName(), RestAPIClientService.Operation.EMPLOYEE_REGISTRATION_DETAILS);
+            WakefulIntentService.sendWakefulWork(this, intent);
 
-        employee_register_is_admin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    employee_register_privilage.setVisibility(View.VISIBLE);
-                } else {
-                    employee_register_privilage.setVisibility(View.GONE);
+            employee_register_is_admin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        employee_register_privilage.setVisibility(View.VISIBLE);
+                    } else {
+                        employee_register_privilage.setVisibility(View.GONE);
+                    }
                 }
+            });
+
+            if (!PrefUtils.getUser(getApplicationContext()).getIsOwner()) {
+                header1.setVisibility(View.GONE);
+            } else {
+                header1.setVisibility(View.VISIBLE);
             }
-        });
+
+            employee_register_image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    image = "";
+                    selectImage(); //select image from camera or gallery.
+                }
+            });
+        }
 
         FrameLayout submit_button = (FrameLayout) findViewById(R.id.submit_button);
 
@@ -125,14 +161,6 @@ public class EmployeeRegisterActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 attemptEmployeeRegistration();
-            }
-        });
-
-        employee_register_image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                image = "";
-                selectImage(); //select image from camera or gallery.
             }
         });
 
@@ -147,15 +175,14 @@ public class EmployeeRegisterActivity extends BaseActivity {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                toolbar.setTitle("EMPLOYEE REGISTRATION");
+                if (getIntent().getSerializableExtra("userList") != null) {
+                    toolbar.setTitle("UPDATE EMPLOYEE DETAILS");
+                } else {
+                    toolbar.setTitle("EMPLOYEE REGISTRATION");
+                }
+
             }
         });
-
-        if(!PrefUtils.getUser(getApplicationContext()).getIsOwner()){
-            header1.setVisibility(View.GONE);
-        } else {
-            header1.setVisibility(View.VISIBLE);
-        }
     }
 
     private void selectImage() {
@@ -283,28 +310,6 @@ public class EmployeeRegisterActivity extends BaseActivity {
             Log.e(TAG, "Years spinner not found (Activity not initialized yet?).");
         }
 
-        if (employee_register_zone != null) {
-
-            ZoneListAdapter adapter = new ZoneListAdapter(getApplicationContext(), R.layout.spinner_item, employeeRegistrationDetail.getZoneList());
-            employee_register_zone.setAdapter(adapter);
-
-            employee_register_zone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                    ZoneList zoneList = (ZoneList) adapterView.getAdapter().getItem(position);
-                    zoneId = zoneList.getZoneId();
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-
-                }
-            });
-        } else {
-            // should not happen...
-            Log.e(TAG, "Years spinner not found (Activity not initialized yet?).");
-        }
-
         if (employee_register_privilage != null) {
 
             PrivilageCategoryListAdapter adapter = new PrivilageCategoryListAdapter(getApplicationContext(), R.layout.spinner_item, employeeRegistrationDetail.getPrivilegeCategoryList());
@@ -332,7 +337,6 @@ public class EmployeeRegisterActivity extends BaseActivity {
 
         // Reset errors.
         employee_register_first_name.setError(null);
-        employee_register_last_name.setError(null);
         employee_register_mobile_number.setError(null);
         employee_register_address.setError(null);
         employee_register_designation.setError(null);
@@ -341,7 +345,6 @@ public class EmployeeRegisterActivity extends BaseActivity {
 
         // Store values at the time of the login attempt.
         String firstName = employee_register_first_name.getText().toString();
-        String lastName = employee_register_last_name.getText().toString();
         String mobileNumber = employee_register_mobile_number.getText().toString();
         String address = employee_register_address.getText().toString();
         String designation = employee_register_designation.getText().toString();
@@ -394,12 +397,6 @@ public class EmployeeRegisterActivity extends BaseActivity {
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(lastName)) {
-            employee_register_last_name.setError(getString(R.string.error_field_required));
-            focusView = employee_register_last_name;
-            cancel = true;
-        }
-
         if (TextUtils.isEmpty(firstName)) {
             employee_register_first_name.setError(getString(R.string.error_field_required));
             focusView = employee_register_first_name;
@@ -416,36 +413,58 @@ public class EmployeeRegisterActivity extends BaseActivity {
             showProgress(true);
             if (!EventBus.getDefault().isRegistered(this))
                 EventBus.getDefault().register(this);
-            Intent employeeRegisterIntent = new Intent(EmployeeRegisterActivity.this, RestAPIClientService.class);
-            User user = new User();
-            user.setEmpName(firstName + " " + lastName);
-            user.setMob(mobileNumber);
-            user.setAddress(address);
-            user.setDesignation(designation);
-            user.setImage(image);
-            user.setDescription(description);
-            if(!PrefUtils.getUser(getApplicationContext()).getIsOwner()){
+
+            if (getIntent().getSerializableExtra("userList") != null) {
+                Intent employeeRegisterIntent = new Intent(EmployeeRegisterActivity.this, RestAPIClientService.class);
+                User user = new User();
+                user.setEmpId(userList.getEmpId());
+                user.setEmpName(firstName);
+                user.setMob(mobileNumber);
+                user.setAddress(address);
+                user.setDesignation(designation);
+                user.setDescription(description);
                 user.setZoneId(PrefUtils.getUser(getApplicationContext()).getZoneId());
                 user.setDepartmentId(PrefUtils.getUser(getApplicationContext()).getDepartmentId());
+                user.setIsAdmin(userList.getIsAdmin());
+                user.setPrivilegeCategoryId(Integer.valueOf(userList.getPrivilegeCategoryId()));
+                user.setUserName(username);
+                user.setPassword(password);
+                User user1 = new User(user);
+                employeeRegisterIntent.putExtra(RestAPIClientService.Operation.class.getName(), RestAPIClientService.Operation.UPDATE_REGISRATION);
+                employeeRegisterIntent.putExtra(App.USER, user1);
+                WakefulIntentService.sendWakefulWork(EmployeeRegisterActivity.this, employeeRegisterIntent);
             } else {
-                user.setZoneId(zoneId);
-                user.setDepartmentId(departmentId);
-            }
+                Intent employeeRegisterIntent = new Intent(EmployeeRegisterActivity.this, RestAPIClientService.class);
+                User user = new User();
+                user.setEmpName(firstName);
+                user.setMob(mobileNumber);
+                user.setAddress(address);
+                user.setDesignation(designation);
+                user.setImage(image);
+                user.setDescription(description);
+                if (!PrefUtils.getUser(getApplicationContext()).getIsOwner()) {
+                    user.setZoneId(PrefUtils.getUser(getApplicationContext()).getZoneId());
+                    user.setDepartmentId(PrefUtils.getUser(getApplicationContext()).getDepartmentId());
+                } else {
+                    user.setZoneId(PrefUtils.getUser(getApplicationContext()).getZoneId());
+                    user.setDepartmentId(departmentId);
+                }
 
-            Log.v("isChecked()", String.valueOf(employee_register_is_admin.isChecked()));
-            if (employee_register_is_admin.isChecked()) {
-                user.setIsAdmin(true);
-                user.setPrivilegeCategoryId(privilegeCategoryId);
-            } else {
-                user.setIsAdmin(false);
-                user.setPrivilegeCategoryId(null);
+                Log.v("isChecked()", String.valueOf(employee_register_is_admin.isChecked()));
+                if (employee_register_is_admin.isChecked()) {
+                    user.setIsAdmin(true);
+                    user.setPrivilegeCategoryId(privilegeCategoryId);
+                } else {
+                    user.setIsAdmin(false);
+                    user.setPrivilegeCategoryId(null);
+                }
+                user.setUserName(username);
+                user.setPassword(password);
+                User user1 = new User(user);
+                employeeRegisterIntent.putExtra(RestAPIClientService.Operation.class.getName(), RestAPIClientService.Operation.EMPLOYEE_REGISRATION);
+                employeeRegisterIntent.putExtra(App.USER, user1);
+                WakefulIntentService.sendWakefulWork(EmployeeRegisterActivity.this, employeeRegisterIntent);
             }
-            user.setUserName(username);
-            user.setPassword(password);
-            User user1 = new User(user);
-            employeeRegisterIntent.putExtra(RestAPIClientService.Operation.class.getName(), RestAPIClientService.Operation.EMPLOYEE_REGISRATION);
-            employeeRegisterIntent.putExtra(App.USER, user1);
-            WakefulIntentService.sendWakefulWork(EmployeeRegisterActivity.this, employeeRegisterIntent);
         }
     }
 

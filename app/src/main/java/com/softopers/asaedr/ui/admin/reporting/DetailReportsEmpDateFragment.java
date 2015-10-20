@@ -81,8 +81,11 @@ public class DetailReportsEmpDateFragment extends Fragment implements AbsListVie
             reportLinear.setVisibility(View.GONE);
         }
 
+        fragment_reporting_comment = (EditText) root.findViewById(R.id.fragment_reporting_comment);
+
         if (getArguments().getString("AdminId") != null) {
             reportLinear.setVisibility(View.VISIBLE);
+            fragment_reporting_comment.setHint("Comment");
             fragment_reporting_template.setVisibility(View.GONE);
         }
 
@@ -90,7 +93,6 @@ public class DetailReportsEmpDateFragment extends Fragment implements AbsListVie
         mLoadingView = root.findViewById(R.id.fragment_reporting_progress);
         mainLinear = (LinearLayout) root.findViewById(R.id.mainLinear);
 
-        fragment_reporting_comment = (EditText) root.findViewById(R.id.fragment_reporting_comment);
         return root;
     }
 

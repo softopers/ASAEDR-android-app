@@ -30,7 +30,7 @@ public class EmployeesActivity extends BaseActivity {
 
     protected int getSelfNavDrawerItem() {
         // we only have a nav drawer if we are in top-level Explore mode.
-        return NAVDRAWER_ITEM_CHANGE_PASSWORD;
+        return NAVDRAWER_ITEM_EMPLOYEES;
     }
 
     @Override

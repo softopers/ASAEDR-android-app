@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.softopers.asaedr.R;
 import com.softopers.asaedr.model.ReportList;
+import com.softopers.asaedr.util.PrefUtils;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -42,7 +43,18 @@ public class EmployeeReportingListAdapter extends ArrayAdapter<ReportList> {
         }
         // Populate the data into the template view using the data object
         if (reportList.getIsComment()) {
-            viewHolder.listitem_reporting_admin.setText(reportList.getDescription().trim());
+            if (reportList.getAdminName().isEmpty()) {
+                viewHolder.listitem_reporting_admin.setText(reportList.getDescription().trim());
+            } else {
+                if (PrefUtils.getUser(getContext()).getIsAdmin()) {
+                    if (reportList.getIsRead())
+                        viewHolder.listitem_reporting_admin.setText("Read || " + reportList.getAdminName() + "\n" + reportList.getDescription().trim());
+                    else
+                        viewHolder.listitem_reporting_admin.setText(reportList.getAdminName() + "\n" + reportList.getDescription().trim());
+                } else {
+                    viewHolder.listitem_reporting_admin.setText(reportList.getAdminName() + "\n" + reportList.getDescription().trim());
+                }
+            }
             viewHolder.listitem_reporting_user.setVisibility(View.GONE);
             viewHolder.listitem_reporting_admin.setVisibility(View.VISIBLE);
         } else {

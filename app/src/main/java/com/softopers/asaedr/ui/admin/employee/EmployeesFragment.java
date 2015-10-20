@@ -26,7 +26,6 @@ import com.softopers.asaedr.model.AdminEmployeeList;
 import com.softopers.asaedr.model.RequestByIds;
 import com.softopers.asaedr.model.UserList;
 import com.softopers.asaedr.ui.App;
-import com.softopers.asaedr.ui.admin.reporting.report_employee_date.AfterReportsActivity;
 import com.softopers.asaedr.util.ConfigUtils;
 import com.softopers.asaedr.util.PrefUtils;
 import com.softopers.asaedr.webapi.RestAPIClientService;
@@ -165,10 +164,8 @@ public class EmployeesFragment extends Fragment implements AbsListView.OnScrollL
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         UserList userList = (UserList) parent.getAdapter().getItem(position);
-                        Intent intent = new Intent(getActivity(), AfterReportsActivity.class);
-                        intent.putExtra("AdminId", PrefUtils.getUser(getActivity()).getEmpId());
-                        intent.putExtra("EmpId", userList.getEmpId());
-                        intent.putExtra("EmpName", userList.getEmpName());
+                        Intent intent = new Intent(getActivity(), EmployeeRegisterActivity.class);
+                        intent.putExtra("userList", userList);
                         startActivity(intent);
                     }
                 });

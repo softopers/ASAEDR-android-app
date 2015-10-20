@@ -187,6 +187,13 @@ public class RestAPIClientService extends WakefulIntentService {
                     e.printStackTrace();
                 }
                 break;
+            case UPDATE_REGISRATION:
+                try {
+                    updateRegistration(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
             default:
         }
     }
@@ -390,6 +397,17 @@ public class RestAPIClientService extends WakefulIntentService {
         }
     }
 
+    private void updateRegistration(Intent intent) throws UnknownServiceException {
+        try {
+            User user = (User) intent.getSerializableExtra(App.USER);
+            ResponseResult responseResult = service.updateRegistration(user);
+            App.eventBus.post(responseResult);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UnknownServiceException(e.getMessage());
+        }
+    }
+
     public enum Operation {
         LOGIN_USER,
         EMPLOYEE_REGISTRATION_DETAILS,
@@ -407,6 +425,7 @@ public class RestAPIClientService extends WakefulIntentService {
         EMPLOYEE_REPORTS_BY_DATE,
         INSERT_COMMENT,
         ADMIN_EMPLOYEE_DATA_BY_ADMIN_ID,
-        CHANGE_USER_PASSWORD
+        CHANGE_USER_PASSWORD,
+        UPDATE_REGISRATION
     }
 }

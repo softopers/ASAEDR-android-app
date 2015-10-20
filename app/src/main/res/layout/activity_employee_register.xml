@@ -68,10 +68,12 @@
                             style="@style/Widget.IOSched.HeaderBar.Spinner"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="1" />
+                            android:layout_weight="1"
+                            android:visibility="gone" />
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/header"
                         style="@style/HeaderBar"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/explore_dropdown_item_height"
@@ -125,38 +127,26 @@
                                 android:layout_marginLeft="-4dp"
                                 android:layout_marginRight="-4dp"
                                 android:layout_marginTop="8dp"
-                                android:hint="First Name"
+                                android:hint="Name"
                                 android:inputType="textCapSentences|textPersonName"
                                 android:minLines="1"
                                 android:scrollbars="vertical" />
 
                             <EditText
-                                android:id="@+id/employee_register_last_name"
+                                android:id="@+id/employee_register_mobile_number"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="-4dp"
                                 android:layout_marginRight="-4dp"
                                 android:layout_marginTop="8dp"
-                                android:hint="Last Name"
-                                android:inputType="textCapSentences|textPersonName"
+                                android:ems="10"
+                                android:hint="Mobile Number"
+                                android:inputType="phone"
+                                android:maxLength="10"
                                 android:minLines="1"
                                 android:scrollbars="vertical" />
                         </LinearLayout>
                     </RelativeLayout>
-
-                    <EditText
-                        android:id="@+id/employee_register_mobile_number"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="-4dp"
-                        android:layout_marginRight="-4dp"
-                        android:layout_marginTop="8dp"
-                        android:ems="10"
-                        android:hint="Mobile Number"
-                        android:inputType="phone"
-                        android:maxLength="10"
-                        android:minLines="1"
-                        android:scrollbars="vertical" />
 
                     <EditText
                         android:id="@+id/employee_register_address"

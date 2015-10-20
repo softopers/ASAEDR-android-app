@@ -1,6 +1,8 @@
 package com.softopers.asaedr.model;
 
-public class UserList {
+import java.io.Serializable;
+
+public class UserList implements Serializable {
     private String ZoneName;
 
     private String PrivilegeCategoryId;
@@ -21,7 +23,7 @@ public class UserList {
 
     private Integer UnReadCounter;
 
-    private String IsAdmin;
+    private Boolean IsAdmin;
 
     private String IsOwner;
 
@@ -123,11 +125,11 @@ public class UserList {
         this.UnReadCounter = UnReadCounter;
     }
 
-    public String getIsAdmin() {
+    public Boolean getIsAdmin() {
         return IsAdmin;
     }
 
-    public void setIsAdmin(String IsAdmin) {
+    public void setIsAdmin(Boolean IsAdmin) {
         this.IsAdmin = IsAdmin;
     }
 

@@ -67,7 +67,9 @@ public interface AssaService {
     @POST("/AdminEmployeeDataByAdminId")
     AdminEmployeeList adminEmployeeDataByAdminId(@Body RequestByIds requestByIds);
 
-
     @POST("/ChangeUserPassword")
     ResponseResult changeUserPassword(@Body ChangePasswordRequset changePasswordRequset);
+
+    @POST("/UpdateRegistration")
+    ResponseResult updateRegistration(@Body User user);
 }

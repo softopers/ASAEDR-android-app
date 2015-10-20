@@ -40,7 +40,7 @@ import de.greenrobot.event.EventBus;
 public class ReportsFragment extends Fragment implements AbsListView.OnScrollListener {
 
     AdminReportTab1Adapter reportTab1Adapter;
-    ArrayList<UserList> userLists = new ArrayList<>();
+    ArrayList<UserList> userLists;
     private ListView mCollectionView;
     private TextView mEmptyView;
     private View mLoadingView;
@@ -88,11 +88,6 @@ public class ReportsFragment extends Fragment implements AbsListView.OnScrollLis
             }
         });
 
-        reportTab1Adapter = new AdminReportTab1Adapter(getActivity(), userLists);
-        mCollectionView.setAdapter(reportTab1Adapter);
-
-        mCollectionView.setOnScrollListener(this);
-        retry();
     }
 
     private void requestDataRefresh() {
@@ -113,7 +108,8 @@ public class ReportsFragment extends Fragment implements AbsListView.OnScrollLis
     @Override
     public void onResume() {
         super.onResume();
-        reportTab1Adapter.notifyDataSetChanged();
+        mCollectionView.setOnScrollListener(this);
+        retry();
     }
 
     void showApiError() {
