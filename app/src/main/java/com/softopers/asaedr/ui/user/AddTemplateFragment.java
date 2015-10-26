@@ -163,7 +163,7 @@ public class AddTemplateFragment extends Fragment {
     }
 
     private boolean isTemplateNameValid(String name) {
-        return name.length() >= 5 && name.length() <= 30;
+        return name.length() >= 5 && name.length() <= 100;
     }
 
     public void onEvent(final ResponseResult e) {

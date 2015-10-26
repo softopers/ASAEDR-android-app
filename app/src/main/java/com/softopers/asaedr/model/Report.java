@@ -6,6 +6,8 @@ public class Report implements Serializable {
 
     private Integer DayStatusId;
 
+    private Integer SchoolId;
+
     private String Content;
 
     private Report Report;
@@ -26,6 +28,14 @@ public class Report implements Serializable {
         this.DayStatusId = DayStatusId;
     }
 
+    public Integer getSchoolId() {
+        return SchoolId;
+    }
+
+    public void setSchoolId(Integer SchoolId) {
+        this.SchoolId = SchoolId;
+    }
+
     public String getContent() {
         return Content;
     }
@@ -36,6 +46,6 @@ public class Report implements Serializable {
 
     @Override
     public String toString() {
-        return "Report [DayStatusId = " + DayStatusId + ", Content = " + Content + "]";
+        return "ClassPojo [DayStatusId = " + DayStatusId + ", SchoolId = " + SchoolId + ", Content = " + Content + "]";
     }
 }

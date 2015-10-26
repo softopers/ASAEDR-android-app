@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -257,7 +258,10 @@ public class LoginActivity extends Activity {
                     startActivity(loginIntent);
                     finish();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Invalid Username or Password.", Toast.LENGTH_SHORT).show();
+                    Toast toast= Toast.makeText(getApplicationContext(),
+                            "Invalid Username or Password.", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 0);
+                    toast.show();
                 }
             }
         });

@@ -58,6 +58,23 @@
             android:orientation="vertical"
             android:padding="@dimen/keyline_1">
 
+            <LinearLayout
+                android:id="@+id/header1"
+                style="@style/HeaderBar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/explore_dropdown_item_height"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <Spinner
+                    android:id="@+id/employee_school"
+                    style="@style/Widget.IOSched.HeaderBar.Spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
             <FrameLayout
                 android:id="@+id/box"
                 android:layout_width="match_parent"

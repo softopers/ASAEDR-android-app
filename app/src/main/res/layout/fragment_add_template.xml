@@ -45,10 +45,10 @@
                 android:layout_marginLeft="-4dp"
                 android:layout_marginRight="-4dp"
                 android:layout_marginTop="8dp"
-                android:ems="10"
+                android:ems="100"
                 android:hint="Template Name"
                 android:inputType="textCapSentences|text"
-                android:maxLength="10"
+                android:maxLength="100"
                 android:minLines="1"
                 android:scrollbars="vertical" />
 

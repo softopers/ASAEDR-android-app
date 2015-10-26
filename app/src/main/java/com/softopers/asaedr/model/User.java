@@ -48,6 +48,10 @@ public class User implements Serializable {
 
     private Integer DepartmentId;
 
+    private ArrayList<School> School;
+
+    private Boolean IsShowSchool;
+
     private User user;
 
     public User(User user) {
@@ -56,6 +60,22 @@ public class User implements Serializable {
 
     public User() {
 
+    }
+
+    public ArrayList<com.softopers.asaedr.model.School> getSchool() {
+        return School;
+    }
+
+    public void setSchool(ArrayList<com.softopers.asaedr.model.School> school) {
+        School = school;
+    }
+
+    public Boolean getIsShowSchool() {
+        return IsShowSchool;
+    }
+
+    public void setIsShowSchool(Boolean isShowSchool) {
+        IsShowSchool = isShowSchool;
     }
 
     public String getZoneName() {

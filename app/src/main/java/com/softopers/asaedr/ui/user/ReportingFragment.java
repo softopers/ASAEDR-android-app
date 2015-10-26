@@ -15,12 +15,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 
 import com.commonsware.cwac.wakeful.WakefulIntentService;
 import com.softopers.asaedr.R;
@@ -30,7 +32,9 @@ import com.softopers.asaedr.model.ReportList;
 import com.softopers.asaedr.model.RequestByIds;
 import com.softopers.asaedr.model.ResponseReportingList;
 import com.softopers.asaedr.model.ResponseResult;
+import com.softopers.asaedr.model.School;
 import com.softopers.asaedr.ui.App;
+import com.softopers.asaedr.ui.admin.employee.SchoolListAdapter;
 import com.softopers.asaedr.util.ConfigUtils;
 import com.softopers.asaedr.util.PrefUtils;
 import com.softopers.asaedr.webapi.RestAPIClientService;
@@ -56,6 +60,8 @@ public class ReportingFragment extends Fragment implements AbsListView.OnScrollL
     private ProgressBar mProgressBarLoadMore;
     private int mCurrentScrollState;
     private boolean mIsLoadingMore = false;
+    private Spinner employee_school;
+    private Integer schoolId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,6 +93,35 @@ public class ReportingFragment extends Fragment implements AbsListView.OnScrollL
         mainLinear = (LinearLayout) root.findViewById(R.id.mainLinear);
 
         fragment_reporting_comment = (EditText) root.findViewById(R.id.fragment_reporting_comment);
+
+        if(PrefUtils.getUser(getActivity()).getIsShowSchool()){
+            LinearLayout header1 = (LinearLayout) root.findViewById(R.id.header1);
+            header1.setVisibility(View.VISIBLE);
+            employee_school = (Spinner) root.findViewById(R.id.employee_school);
+
+            if (employee_school != null) {
+
+                SchoolListAdapter adapter = new SchoolListAdapter(getActivity(), R.layout.spinner_item, PrefUtils.getUser(getActivity()).getSchool());
+                employee_school.setAdapter(adapter);
+
+                employee_school.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                        School school= (School) adapterView.getAdapter().getItem(position);
+                        schoolId = school.getSchoolId();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+
+            } else {
+                // should not happen...
+                Log.e("TAG", "Years spinner not found (Activity not initialized yet?).");
+            }
+        }
         return root;
     }
 
@@ -164,6 +199,9 @@ public class ReportingFragment extends Fragment implements AbsListView.OnScrollL
                 Report report = new Report();
                 report.setContent(reporting.trim());
                 report.setDayStatusId(Integer.valueOf(getArguments().getString("DayStatusId")));
+                if(PrefUtils.getUser(getActivity()).getIsShowSchool()){
+                    report.setSchoolId(schoolId);
+                }
                 Report report1 = new Report(report);
                 intent.putExtra(RestAPIClientService.Operation.class.getName(), RestAPIClientService.Operation.INSERT_REPORT);
                 intent.putExtra(App.INSERT_REPORT, report1);
