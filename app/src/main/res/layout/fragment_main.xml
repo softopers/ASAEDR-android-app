@@ -13,69 +13,102 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/api_error"
+    <LinearLayout xmlns:app="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#fffcac"
-        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/submit_button"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/api_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fffcac"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:padding="@dimen/content_padding_normal"
+                android:text="@string/no_connection_cant_load"
+                android:textSize="@dimen/text_size_medium" />
+
+            <Button
+                android:id="@+id/retry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="@dimen/element_spacing_normal"
+                android:text="@string/retry" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ListView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:padding="@dimen/explore_grid_padding_half"
+                android:scrollbarStyle="outsideOverlay"
+                app:internalPadding="@dimen/explore_grid_padding" />
+
+            <TextView
+                android:id="@+id/empty_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="@color/body_text_2"
+                android:textSize="@dimen/text_size_medium"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/fragment_main_progress"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/submit_button"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/theme_primary"
+        android:clickable="true"
+        android:contentDescription="@string/employee_register_submitlink"
+        android:focusable="true"
+        android:foreground="?photoItemForeground"
         android:visibility="gone">
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:padding="@dimen/content_padding_normal"
-            android:text="@string/no_connection_cant_load"
-            android:textSize="@dimen/text_size_medium" />
-
-        <Button
-            android:id="@+id/retry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="@dimen/element_spacing_normal"
-            android:text="@string/retry" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <ListView
-            android:id="@+id/list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:padding="@dimen/explore_grid_padding_half"
-            android:scrollbarStyle="outsideOverlay"
-            app:internalPadding="@dimen/explore_grid_padding" />
-
-        <TextView
-            android:id="@+id/empty_text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:gravity="center"
-            android:textColor="@color/body_text_2"
+            android:drawableLeft="@drawable/ic_submit"
+            android:drawablePadding="8dp"
+            android:fontFamily="@string/font_fontFamily_medium"
+            android:gravity="center_vertical"
+            android:paddingRight="20dp"
+            android:text="@string/employee_register_submitlink"
+            android:textAllCaps="true"
+            android:textColor="#fff"
             android:textSize="@dimen/text_size_medium"
-            android:visibility="gone" />
-
-        <ProgressBar
-            android:id="@+id/fragment_main_progress"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:visibility="gone" />
-    </LinearLayout>
-</LinearLayout>
+            android:textStyle="bold" />
+    </FrameLayout>
+</RelativeLayout>

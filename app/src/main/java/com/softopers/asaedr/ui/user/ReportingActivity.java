@@ -1,8 +1,11 @@
 package com.softopers.asaedr.ui.user;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.softopers.asaedr.R;
@@ -26,16 +29,20 @@ public class ReportingActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         if (null == savedInstanceState) {
-            if (getIntent().getStringExtra("DayStatusId") != null) {
-                ReportingFragment reportingFragment = new ReportingFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("DayStatusId", getIntent().getStringExtra("DayStatusId"));
-                bundle.putBoolean("isLock", getIntent().getBooleanExtra("isLock", false));
-                reportingFragment.setArguments(bundle);
+            if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getBoolean("comment")) {
+            } else {
+                if (getIntent().getStringExtra("DayStatusId") != null) {
+                    ReportingFragment reportingFragment = new ReportingFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("DayStatusId", getIntent().getStringExtra("DayStatusId"));
+                    bundle.putBoolean("isLock", getIntent().getBooleanExtra("isLock", false));
+                    reportingFragment.setArguments(bundle);
 
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, reportingFragment)
-                        .commit();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container, reportingFragment)
+                            .commit();
+                }
+
             }
         }
 
@@ -50,7 +57,12 @@ public class ReportingActivity extends BaseActivity {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                toolbar.setTitle(getIntent().getStringExtra("date"));
+                if (getIntent().getExtras().getString("date") != null) {
+                    toolbar.setTitle(getIntent().getExtras().getString("date"));
+                } else {
+                    toolbar.setTitle(getIntent().getStringExtra("date"));
+                }
+
             }
         });
     }
@@ -60,4 +72,30 @@ public class ReportingActivity extends BaseActivity {
         return NAVDRAWER_ITEM_INVALID;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getBoolean("comment")) {
+            String ns = Context.NOTIFICATION_SERVICE;
+            NotificationManager nMgr = (NotificationManager) getApplicationContext().getSystemService(ns);
+            nMgr.cancelAll();
+            String id = getIntent().getExtras().getString("DayStatusId");
+            Log.v("id", String.valueOf(id));
+            ReportingFragment reportingFragment = new ReportingFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("DayStatusId", id);
+            reportingFragment.setArguments(bundle);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, reportingFragment)
+                    .commit();
+            getIntent().removeExtra("comment");
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        
+    }
 }

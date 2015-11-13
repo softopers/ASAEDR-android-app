@@ -35,6 +35,7 @@ import android.widget.TextView;
 
 import com.softopers.asaedr.R;
 import com.softopers.asaedr.ui.admin.employee.EmployeesActivity;
+import com.softopers.asaedr.ui.admin.message.MessageActivity;
 import com.softopers.asaedr.ui.admin.reporting.ReportsActivity;
 import com.softopers.asaedr.ui.user.MainActivity;
 import com.softopers.asaedr.util.LUtils;
@@ -258,7 +259,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
             }
 
             ImageView profile_image = (ImageView) findViewById(R.id.profile_image);
-            if(!PrefUtils.getUser(getApplicationContext()).getImage().equals("")){
+            if (!PrefUtils.getUser(getApplicationContext()).getImage().equals("")) {
                 Picasso.with(getApplicationContext())
                         .load("http://app.allsportsacademy.in/Image/" + PrefUtils.getUser(getApplicationContext()).getImage())
                         .placeholder(R.drawable.person_image_empty)
@@ -301,10 +302,10 @@ public abstract class BaseActivity extends ActionBarActivity implements
         // decide which items will appear in the nav drawer
         if (PrefUtils.getUserRole(getApplicationContext()).equals(App.USER)) {
             mNavDrawerItems.add(NAVDRAWER_ITEM_REPORTING);
-//            mNavDrawerItems.add(NAVDRAWER_ITEM_MESSAGES);
+            mNavDrawerItems.add(NAVDRAWER_ITEM_MESSAGES);
         } else {
             mNavDrawerItems.add(NAVDRAWER_ITEM_REPORTS);
-//            mNavDrawerItems.add(NAVDRAWER_ITEM_ADMIN_MESSAGES);
+            mNavDrawerItems.add(NAVDRAWER_ITEM_ADMIN_MESSAGES);
             mNavDrawerItems.add(NAVDRAWER_ITEM_EMPLOYEES);
         }
         mNavDrawerItems.add(NAVDRAWER_ITEM_SEPARATOR_SPECIAL);
@@ -394,7 +395,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
                 finish();
                 break;
             case NAVDRAWER_ITEM_ADMIN_MESSAGES:
-                intent = new Intent(this, MainActivity.class);
+                intent = new Intent(this, MessageActivity.class);
                 startActivity(intent);
                 finish();
                 break;

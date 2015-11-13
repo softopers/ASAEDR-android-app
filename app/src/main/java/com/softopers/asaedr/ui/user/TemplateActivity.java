@@ -29,8 +29,14 @@ public class TemplateActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         if (null == savedInstanceState) {
+
+            TemplateFragment templateFragment = new TemplateFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("data", getIntent().getStringExtra("data"));
+            templateFragment.setArguments(bundle);
+
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, TemplateFragment.newInstance())
+                    .replace(R.id.container, templateFragment)
                     .commit();
         }
 

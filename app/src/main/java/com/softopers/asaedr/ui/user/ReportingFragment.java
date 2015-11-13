@@ -39,7 +39,11 @@ import com.softopers.asaedr.util.ConfigUtils;
 import com.softopers.asaedr.util.PrefUtils;
 import com.softopers.asaedr.webapi.RestAPIClientService;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import de.greenrobot.event.EventBus;
 
@@ -48,10 +52,12 @@ import de.greenrobot.event.EventBus;
  */
 public class ReportingFragment extends Fragment implements AbsListView.OnScrollListener {
 
+    public static final String inputFormat = "HH:mm";
     ListView fragment_reporting_list_view;
     EmployeeReportingListAdapter employeeReportingListAdapter;
     ArrayList<ReportList> reports;
     ImageButton fragment_reporting_template;
+    SimpleDateFormat inputParser = new SimpleDateFormat(inputFormat, Locale.US);
     private int pageNumber = 0;
     private EditText fragment_reporting_comment;
     private View mApiError;
@@ -62,6 +68,11 @@ public class ReportingFragment extends Fragment implements AbsListView.OnScrollL
     private boolean mIsLoadingMore = false;
     private Spinner employee_school;
     private Integer schoolId;
+    private Date date;
+    private Date dateCompareOne;
+    private Date dateCompareTwo;
+    private String compareStringOne = "9:00";
+    private String compareStringTwo = "19:00";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,6 +99,8 @@ public class ReportingFragment extends Fragment implements AbsListView.OnScrollL
         if (getArguments().getBoolean("isLock")) {
             reportLinear.setVisibility(View.GONE);
         }
+
+        compareDates();
 
         mLoadingView = root.findViewById(R.id.fragment_reporting_progress);
         mainLinear = (LinearLayout) root.findViewById(R.id.mainLinear);
@@ -148,8 +161,8 @@ public class ReportingFragment extends Fragment implements AbsListView.OnScrollL
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), TemplateActivity.class);
+                intent.putExtra("data", fragment_reporting_comment.getText().toString());
                 startActivityForResult(intent, 1);
-                fragment_reporting_comment.setText("");
             }
         });
 
@@ -301,7 +314,6 @@ public class ReportingFragment extends Fragment implements AbsListView.OnScrollL
         }
     }
 
-
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
@@ -414,5 +426,29 @@ public class ReportingFragment extends Fragment implements AbsListView.OnScrollL
         super.onPause();
         if (EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().unregister(this);
+    }
+
+    private void compareDates(){
+        Calendar now = Calendar.getInstance();
+
+        int hour = now.get(Calendar.HOUR_OF_DAY);
+        int minute = now.get(Calendar.MINUTE);
+
+        date = parseDate(hour + ":" + minute);
+        dateCompareOne = parseDate(compareStringOne);
+        dateCompareTwo = parseDate(compareStringTwo);
+
+        if ( dateCompareOne.before( date ) && dateCompareTwo.after(date)) {
+            reportLinear.setVisibility(View.GONE);
+        }
+    }
+
+    private Date parseDate(String date) {
+
+        try {
+            return inputParser.parse(date);
+        } catch (java.text.ParseException e) {
+            return new Date(0);
+        }
     }
 }

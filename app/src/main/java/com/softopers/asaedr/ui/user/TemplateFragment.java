@@ -229,7 +229,7 @@ public class TemplateFragment extends Fragment implements AbsListView.OnScrollLi
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
                                                 Intent returnIntent = new Intent();
-                                                returnIntent.putExtra("result", templateDetail.getTemplateContent());
+                                                returnIntent.putExtra("result", getArguments().getString("data") + " " + templateDetail.getTemplateContent());
                                                 getActivity().setResult(Activity.RESULT_OK, returnIntent);
                                                 getActivity().finish();
                                             }
@@ -281,7 +281,7 @@ public class TemplateFragment extends Fragment implements AbsListView.OnScrollLi
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         TemplateDetail templateDetail = (TemplateDetail) parent.getAdapter().getItem(position);
                         Intent returnIntent = new Intent();
-                        returnIntent.putExtra("result", templateDetail.getTemplateContent());
+                        returnIntent.putExtra("result", getArguments().getString("data") + " " + templateDetail.getTemplateContent());
                         getActivity().setResult(Activity.RESULT_OK, returnIntent);
                         getActivity().finish();
                     }

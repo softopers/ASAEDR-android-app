@@ -3,47 +3,36 @@ package com.softopers.asaedr.model;
 import java.io.Serializable;
 
 public class UserList implements Serializable {
+    boolean selected = false;
     private String ZoneName;
-
     private String PrivilegeCategoryId;
-
     private String Mob;
-
     private String Description;
-
     private String Privilage;
-
     private String EmpId;
-
     private String Password;
-
     private String UserName;
-
     private String ZoneId;
-
     private Integer UnReadCounter;
-
     private Boolean IsAdmin;
-
     private String IsOwner;
-
     private String IsActive;
-
     private String Address;
-
     private String EmpName;
-
     private String Image;
-
     private String IsDeleted;
-
     private String DeviceToken;
-
     private String DepartmentId;
-
     private String DepartmentName;
-
     private String Designation;
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
 
     public String getZoneName() {
         return ZoneName;
@@ -215,6 +204,29 @@ public class UserList implements Serializable {
 
     @Override
     public String toString() {
-        return "ClassPojo [ZoneName = " + ZoneName + ", PrivilegeCategoryId = " + PrivilegeCategoryId + ", Mob = " + Mob + ", Description = " + Description + ", Privilage = " + Privilage + ", EmpId = " + EmpId + ", Password = " + Password + ", UserName = " + UserName + ", ZoneId = " + ZoneId + ", UnReadCounter = " + UnReadCounter + ", IsAdmin = " + IsAdmin + ", IsOwner = " + IsOwner + ", IsActive = " + IsActive + ", Address = " + Address + ", EmpName = " + EmpName + ", Image = " + Image + ", IsDeleted = " + IsDeleted + ", DeviceToken = " + DeviceToken + ", DepartmentId = " + DepartmentId + ", DepartmentName = " + DepartmentName + ", Designation = " + Designation + "]";
+        return "UserList{" +
+                "ZoneName='" + ZoneName + '\'' +
+                ", PrivilegeCategoryId='" + PrivilegeCategoryId + '\'' +
+                ", Mob='" + Mob + '\'' +
+                ", Description='" + Description + '\'' +
+                ", Privilage='" + Privilage + '\'' +
+                ", EmpId='" + EmpId + '\'' +
+                ", Password='" + Password + '\'' +
+                ", UserName='" + UserName + '\'' +
+                ", ZoneId='" + ZoneId + '\'' +
+                ", UnReadCounter=" + UnReadCounter +
+                ", IsAdmin=" + IsAdmin +
+                ", IsOwner='" + IsOwner + '\'' +
+                ", IsActive='" + IsActive + '\'' +
+                ", Address='" + Address + '\'' +
+                ", EmpName='" + EmpName + '\'' +
+                ", Image='" + Image + '\'' +
+                ", IsDeleted='" + IsDeleted + '\'' +
+                ", DeviceToken='" + DeviceToken + '\'' +
+                ", DepartmentId='" + DepartmentId + '\'' +
+                ", DepartmentName='" + DepartmentName + '\'' +
+                ", Designation='" + Designation + '\'' +
+                ", selected=" + selected +
+                '}';
     }
 }

@@ -93,7 +93,9 @@
 
         <activity
             android:name=".ui.admin.reporting.DetailReportsEmpDateActivity"
-            android:label="@string/app_name" />        <activity
+            android:label="@string/app_name" />
+
+        <activity
             android:name=".ui.user.AddTemplateActivity"
             android:configChanges="screenSize|orientation"
             android:label="@string/app_name" />
@@ -107,6 +109,11 @@
             android:name=".ui.ChangePasswordActivity"
             android:configChanges="screenSize|orientation"
             android:label="@string/app_name" />
+
+        <activity
+            android:name=".ui.admin.message.MessageActivity"
+            android:configChanges="screenSize|orientation"
+            android:label="@string/navdrawer_item_messages" />
 
         <service android:name="com.softopers.asaedr.webapi.RestAPIClientService" />
 
