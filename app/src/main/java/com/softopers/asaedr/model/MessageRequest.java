@@ -1,6 +1,8 @@
 package com.softopers.asaedr.model;
 
-public class MessageRequest {
+import java.io.Serializable;
+
+public class MessageRequest implements Serializable{
     private SendMessage SendMessage;
 
     public SendMessage getSendMessage() {

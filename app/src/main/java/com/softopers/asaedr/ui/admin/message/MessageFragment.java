@@ -8,20 +8,21 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.commonsware.cwac.wakeful.WakefulIntentService;
 import com.softopers.asaedr.R;
@@ -29,6 +30,7 @@ import com.softopers.asaedr.model.AdminEmployeeList;
 import com.softopers.asaedr.model.EmpMessageList;
 import com.softopers.asaedr.model.MessageRequest;
 import com.softopers.asaedr.model.RequestByIds;
+import com.softopers.asaedr.model.ResponseMessage;
 import com.softopers.asaedr.model.SendMessage;
 import com.softopers.asaedr.model.UserList;
 import com.softopers.asaedr.ui.App;
@@ -43,7 +45,7 @@ import de.greenrobot.event.EventBus;
 /**
  * Created by Krunal on 02-08-2015.
  */
-public class MessageFragment extends Fragment implements AbsListView.OnScrollListener {
+public class MessageFragment extends Fragment {
 
     private static int count = 0;
     CustomAdapter customAdapter;
@@ -54,12 +56,12 @@ public class MessageFragment extends Fragment implements AbsListView.OnScrollLis
     private TextView mEmptyView;
     private View mLoadingView;
     private int pageNumber = 0;
-    private int mCurrentScrollState;
-    private boolean mIsLoadingMore = false;
     private View mApiError;
-    private ProgressBar mProgressBarLoadMore;
     private CheckBox checkBox_header;
     private FrameLayout submit_button;
+    private EditText fragment_reporting_comment;
+    private LinearLayout main_layout;
+    private ArrayList<EmpMessageList> empMessageLists = new ArrayList<EmpMessageList>();
 
     public static MessageFragment newInstance() {
         MessageFragment fragment = new MessageFragment();
@@ -71,9 +73,10 @@ public class MessageFragment extends Fragment implements AbsListView.OnScrollLis
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         mCollectionView = (ListView) view.findViewById(R.id.list);
-
+        main_layout = (LinearLayout) view.findViewById(R.id.main_layout);
+        view.findViewById(R.id.reportLinear).setVisibility(View.VISIBLE);
         headerView = inflater.inflate(R.layout.custom_list_view_header, mCollectionView, false);
-
+        fragment_reporting_comment = (EditText) view.findViewById(R.id.fragment_reporting_comment);
         checkBox_header = (CheckBox) headerView.findViewById(R.id.listitem_message_admin_check);
         return view;
     }
@@ -103,13 +106,6 @@ public class MessageFragment extends Fragment implements AbsListView.OnScrollLis
 
         mCollectionView.addHeaderView(headerView);
 
-        LayoutInflater mInflater = (LayoutInflater) getActivity()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        RelativeLayout mFooterView = (RelativeLayout) mInflater.inflate(R.layout.load_more_footer, mCollectionView, false);
-        mProgressBarLoadMore = (ProgressBar) mFooterView
-                .findViewById(R.id.load_more_progressBar);
-        mCollectionView.addFooterView(mFooterView);
-
         mEmptyView = (TextView) view.findViewById(R.id.empty_text);
         mLoadingView = view.findViewById(R.id.fragment_main_progress);
 
@@ -120,19 +116,17 @@ public class MessageFragment extends Fragment implements AbsListView.OnScrollLis
                 retry();
             }
         });
+
     }
 
     private void requestDataRefresh() {
-
-        if (!EventBus.getDefault().isRegistered(this))
-            EventBus.getDefault().register(this);
 
         RequestByIds requestByIds = new RequestByIds();
         requestByIds.setAdminId(PrefUtils.getUser(getActivity()).getEmpId());
         requestByIds.setPageNumber(pageNumber);
         Intent intent = new Intent(getActivity(), RestAPIClientService.class);
-        intent.putExtra(RestAPIClientService.Operation.class.getName(), RestAPIClientService.Operation.ADMIN_EMPLOYEE_DATA_BY_ADMIN_ID);
-        intent.putExtra(App.ADMIN_EMPLOYEE_DATA_BY_ADMIN_ID, requestByIds);
+        intent.putExtra(RestAPIClientService.Operation.class.getName(), RestAPIClientService.Operation.REQUEST_BY_EMP_EMAIL_ID_ADMIN);
+        intent.putExtra(App.REQUEST_BY_EMP_EMAIL_ID_ADMIN, requestByIds);
         WakefulIntentService.sendWakefulWork(getActivity(), intent);
     }
 
@@ -140,7 +134,6 @@ public class MessageFragment extends Fragment implements AbsListView.OnScrollLis
     @Override
     public void onResume() {
         super.onResume();
-        mCollectionView.setOnScrollListener(this);
         retry();
     }
 
@@ -176,52 +169,96 @@ public class MessageFragment extends Fragment implements AbsListView.OnScrollLis
 
                 if (adminEmployeeList.getStatus().equals("Success")) {
                     if (adminEmployeeList.getUserList().size() > 0) {
-                        if (customAdapter == null || pageNumber == 0) {
-                            userLists = adminEmployeeList.getUserList();
-                            customAdapter = new CustomAdapter(getActivity(), userLists);
-                            mCollectionView.setAdapter(customAdapter);
-                        } else {
-                            showLoadMoreProgress(false);
-                            mIsLoadingMore = false;
-                            userLists.addAll(adminEmployeeList.getUserList());
-                            customAdapter.notifyDataSetChanged();
-                        }
+                        userLists = adminEmployeeList.getUserList();
+                        customAdapter = new CustomAdapter(getActivity(), userLists);
+                        mCollectionView.setAdapter(customAdapter);
                     }
-                } else {
-                    showLoadMoreProgress(false);
-                    mIsLoadingMore = false;
-                    mCollectionView.setOnScrollListener(null);
                 }
 
                 submit_button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MessageRequest messageRequest = new MessageRequest();
-                        SendMessage sendMessage = new SendMessage();
+                        fragment_reporting_comment.setError(null);
+                        String reporting = fragment_reporting_comment.getText().toString();
 
-                        if (customAdapter.isAllValuesChecked()) {
-                            sendMessage.setSendType(3);
-                        } else {
-                            ArrayList<EmpMessageList> empMessageLists = new ArrayList<EmpMessageList>();
-                            EmpMessageList empMessageList = new EmpMessageList();
-                            for (int i = 0; i < userLists.size(); i++) {
-                                UserList userList = userLists.get(i);
-                                if (userList.isSelected()) {
-                                    empMessageList.setEmpId(userList.getEmpId());
-                                    empMessageLists.add(empMessageList);
-                                }
-                            }
-                            sendMessage.setEmpMessageList(empMessageLists);
-                            sendMessage.setSendType(2);
+                        boolean cancel = false;
+                        View focusView = null;
+
+                        if (TextUtils.isEmpty(reporting.trim())) {
+                            fragment_reporting_comment.setError(getString(R.string.error_field_required));
+                            fragment_reporting_comment.setText("");
+                            focusView = fragment_reporting_comment;
+                            cancel = true;
                         }
-                        sendMessage.setAdminId(PrefUtils.getUser(getActivity()).getEmpId());
-                        sendMessage.setMessageContent("hello sallu");
 
-                        messageRequest.setSendMessage(sendMessage);
+                        if (cancel) {
+                            // There was an error; don't attempt login and focus the first
+                            // form field with an error.
+                            focusView.requestFocus();
+                        } else {
+                            if (ConfigUtils.isOnline(getActivity())) {
 
-                        Log.v("resp", String.valueOf(messageRequest) + " - - - - - - - - " );
+                                Intent intent = new Intent(getActivity(), RestAPIClientService.class);
+
+                                MessageRequest messageRequest = new MessageRequest();
+                                SendMessage sendMessage = new SendMessage();
+
+                                if (customAdapter.isAllValuesChecked()) {
+                                    sendMessage.setSendType(3);
+                                } else {
+
+                                    for (int i = 0; i < userLists.size(); i++) {
+                                        UserList userList = userLists.get(i);
+                                        if (userList.isSelected()) {
+                                            EmpMessageList empMessageList = new EmpMessageList();
+                                            empMessageList.setEmpId(userList.getEmpId());
+                                            empMessageLists.add(empMessageList);
+                                        }
+                                    }
+                                    if (empMessageLists.size() == 1) {
+                                        sendMessage.setSendType(1);
+                                    } else {
+                                        sendMessage.setSendType(2);
+                                    }
+                                    sendMessage.setEmpMessageList(empMessageLists);
+                                }
+                                sendMessage.setAdminId(PrefUtils.getUser(getActivity()).getEmpId());
+                                sendMessage.setMessageContent(fragment_reporting_comment.getText().toString());
+
+                                messageRequest.setSendMessage(sendMessage);
+                                Log.v("empMessageLists", empMessageLists.toString());
+                                if (!empMessageLists.isEmpty()) {
+                                    showProgress(true);
+                                    intent.putExtra(RestAPIClientService.Operation.class.getName(), RestAPIClientService.Operation.MESSAGE_REQUEST);
+                                    intent.putExtra(App.MESSAGE_REQUEST, messageRequest);
+                                    WakefulIntentService.sendWakefulWork(getActivity(), intent);
+                                } else if (customAdapter.isAllValuesChecked()) {
+                                    showProgress(true);
+                                    intent.putExtra(RestAPIClientService.Operation.class.getName(), RestAPIClientService.Operation.MESSAGE_REQUEST);
+                                    intent.putExtra(App.MESSAGE_REQUEST, messageRequest);
+                                    WakefulIntentService.sendWakefulWork(getActivity(), intent);
+                                } else {
+                                    Toast.makeText(getActivity(), "Select Employees", Toast.LENGTH_SHORT).show();
+                                }
+
+                            } else {
+                                showApiError();
+                                getActivity().findViewById(R.id.retry).setVisibility(View.GONE);
+                            }
+                        }
                     }
                 });
+            }
+        });
+    }
+
+    public void onEvent(final ResponseMessage e) {
+        getActivity().runOnUiThread(new Runnable() {
+            public void run() {
+                Log.v("TAG", e.getStatus());
+                showProgress(false);
+                getActivity().finish();
+
             }
         });
     }
@@ -235,12 +272,12 @@ public class MessageFragment extends Fragment implements AbsListView.OnScrollLis
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mCollectionView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mCollectionView.animate().setDuration(shortAnimTime).alpha(
+            main_layout.setVisibility(show ? View.GONE : View.VISIBLE);
+            main_layout.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mCollectionView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    main_layout.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
 
@@ -256,31 +293,7 @@ public class MessageFragment extends Fragment implements AbsListView.OnScrollLis
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
             mLoadingView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mCollectionView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    public void showLoadMoreProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mProgressBarLoadMore.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressBarLoadMore.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressBarLoadMore.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressBarLoadMore.setVisibility(show ? View.VISIBLE : View.GONE);
-//            mCollectionView.setVisibility(show ? View.GONE : View.VISIBLE);
+            main_layout.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -296,39 +309,6 @@ public class MessageFragment extends Fragment implements AbsListView.OnScrollLis
         super.onPause();
         if (EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().unregister(this);
-    }
-
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-            view.invalidateViews();
-        }
-        mCurrentScrollState = scrollState;
-    }
-
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
-                         int totalItemCount) {
-        if (totalItemCount == 0 || customAdapter == null) {
-            showLoadMoreProgress(false);
-            return;
-        }
-        if (visibleItemCount == totalItemCount) {
-            showLoadMoreProgress(false);
-            return;
-        }
-        boolean loadMore = firstVisibleItem + visibleItemCount >= totalItemCount;
-        if (!mIsLoadingMore && loadMore && mCurrentScrollState != SCROLL_STATE_IDLE) {
-            if (ConfigUtils.isOnline(getActivity())) {
-                hideApiError();
-                showLoadMoreProgress(true);
-                mIsLoadingMore = true;
-                ++pageNumber;
-                requestDataRefresh();
-            } else {
-                showApiError();
-            }
-        }
     }
 
     public class CustomAdapter extends ArrayAdapter<UserList> {

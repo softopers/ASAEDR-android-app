@@ -1,9 +1,9 @@
 package com.softopers.asaedr.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SendMessage
-{
+public class SendMessage implements Serializable {
     private int SendType;
 
     private String AdminId;
@@ -12,43 +12,35 @@ public class SendMessage
 
     private String MessageContent;
 
-    public int getSendType ()
-    {
+    public int getSendType() {
         return SendType;
     }
 
-    public void setSendType (int SendType)
-    {
+    public void setSendType(int SendType) {
         this.SendType = SendType;
     }
 
-    public String getAdminId ()
-    {
+    public String getAdminId() {
         return AdminId;
     }
 
-    public void setAdminId (String AdminId)
-    {
+    public void setAdminId(String AdminId) {
         this.AdminId = AdminId;
     }
 
-    public ArrayList<EmpMessageList> getEmpMessageList ()
-    {
+    public ArrayList<EmpMessageList> getEmpMessageList() {
         return EmpMessageList;
     }
 
-    public void setEmpMessageList (ArrayList<EmpMessageList> EmpMessageList)
-    {
+    public void setEmpMessageList(ArrayList<EmpMessageList> EmpMessageList) {
         this.EmpMessageList = EmpMessageList;
     }
 
-    public String getMessageContent ()
-    {
+    public String getMessageContent() {
         return MessageContent;
     }
 
-    public void setMessageContent (String MessageContent)
-    {
+    public void setMessageContent(String MessageContent) {
         this.MessageContent = MessageContent;
     }
 

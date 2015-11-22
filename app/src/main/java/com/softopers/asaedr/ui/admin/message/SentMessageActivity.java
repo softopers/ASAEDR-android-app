@@ -9,7 +9,7 @@ import com.softopers.asaedr.R;
 import com.softopers.asaedr.ui.BaseActivity;
 
 
-public class MessageActivity extends BaseActivity {
+public class SentMessageActivity extends BaseActivity {
 
     private Handler mHandler = new Handler();
 
@@ -22,10 +22,13 @@ public class MessageActivity extends BaseActivity {
         }
 
         setContentView(R.layout.activity_main);
-
+        SentMessageFragment sentMessageFragment = new SentMessageFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("message_id", getIntent().getStringExtra("message_id"));
+        sentMessageFragment.setArguments(bundle);
         if (null == savedInstanceState) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, MessageFragment.newInstance())
+                    .replace(R.id.container, sentMessageFragment)
                     .commit();
         }
 
@@ -41,7 +44,7 @@ public class MessageActivity extends BaseActivity {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                toolbar.setTitle("NEW MESSAGE");
+                toolbar.setTitle("SENT MESSAGE");
             }
         });
     }

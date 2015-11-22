@@ -13,10 +13,14 @@ import com.softopers.asaedr.model.AdminEmployeeList;
 import com.softopers.asaedr.model.ChangePasswordRequset;
 import com.softopers.asaedr.model.EmployeeRegistrationDetail;
 import com.softopers.asaedr.model.LoginDetail;
+import com.softopers.asaedr.model.MessageListResponse;
+import com.softopers.asaedr.model.MessageRequest;
 import com.softopers.asaedr.model.Report;
 import com.softopers.asaedr.model.RequestByIds;
+import com.softopers.asaedr.model.ResponseMessage;
 import com.softopers.asaedr.model.ResponseReportingList;
 import com.softopers.asaedr.model.ResponseResult;
+import com.softopers.asaedr.model.ResponseSentMessageDetail;
 import com.softopers.asaedr.model.TemplateList;
 import com.softopers.asaedr.model.TemplateMaster;
 import com.softopers.asaedr.model.User;
@@ -194,6 +198,34 @@ public class RestAPIClientService extends WakefulIntentService {
                     e.printStackTrace();
                 }
                 break;
+            case MESSAGE_REQUEST:
+                try {
+                    sendMessage(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case MESSAGE_LIST_BY_EMPID:
+                try {
+                    messageListByEmpId(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case SENT_MESSAGE_DETAIL:
+                try {
+                    sentMessageDetail(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case REQUEST_BY_EMP_EMAIL_ID_ADMIN:
+                try {
+                    adminEmployeeDataByAdminIdForMessage(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
             default:
         }
     }
@@ -203,7 +235,7 @@ public class RestAPIClientService extends WakefulIntentService {
             User user = (User) intent.getSerializableExtra(App.USER);
             String token = PrefUtils.getDeviceToken(RestAPIClientService.this);
             if (token.equals("")) {
-                String msg = "";
+                String msg;
                 GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(RestAPIClientService.this);
                 InstanceID instanceID = InstanceID.getInstance(RestAPIClientService.this);
                 token = instanceID.getToken(GCM_TOKEN, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
@@ -212,7 +244,7 @@ public class RestAPIClientService extends WakefulIntentService {
                 Log.d("Tag", msg);
             }
             user.setDeviceToken(token);
-            Log.v(LOGTAG, new Gson().toJson(user).toString());
+            Log.v(LOGTAG, new Gson().toJson(user));
             LoginDetail loginDetail = service.loginUser(user);
             App.eventBus.post(loginDetail);
         } catch (Exception e) {
@@ -408,6 +440,50 @@ public class RestAPIClientService extends WakefulIntentService {
         }
     }
 
+    private void sendMessage(Intent intent) throws UnknownServiceException {
+        try {
+            MessageRequest messageRequest = (MessageRequest) intent.getSerializableExtra(App.MESSAGE_REQUEST);
+            ResponseMessage responseMessage = service.sendMessage(messageRequest);
+            App.eventBus.post(responseMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UnknownServiceException(e.getMessage());
+        }
+    }
+
+    private void messageListByEmpId(Intent intent) throws UnknownServiceException {
+        try {
+            RequestByIds requestByIds = (RequestByIds) intent.getSerializableExtra(App.MESSAGE_LIST_BY_EMPID);
+            MessageListResponse messageListResponse = service.messageListByEmpId(requestByIds);
+            App.eventBus.post(messageListResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UnknownServiceException(e.getMessage());
+        }
+    }
+
+    private void sentMessageDetail(Intent intent) throws UnknownServiceException {
+        try {
+            RequestByIds requestByIds= (RequestByIds) intent.getSerializableExtra(App.SENT_MESSAGE_DETAIL);
+            ResponseSentMessageDetail responseSentMessageDetail= service.sentMessageDetail(requestByIds);
+            App.eventBus.post(responseSentMessageDetail);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UnknownServiceException(e.getMessage());
+        }
+    }
+
+    private void adminEmployeeDataByAdminIdForMessage(Intent intent) throws UnknownServiceException {
+        try {
+            RequestByIds requestByIds = (RequestByIds) intent.getSerializableExtra(App.REQUEST_BY_EMP_EMAIL_ID_ADMIN);
+            AdminEmployeeList userDateWiseReport = service.adminEmployeeDataByAdminIdForMessage(requestByIds);
+            App.eventBus.post(userDateWiseReport);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UnknownServiceException(e.getMessage());
+        }
+    }
+
     public enum Operation {
         LOGIN_USER,
         EMPLOYEE_REGISTRATION_DETAILS,
@@ -426,6 +502,10 @@ public class RestAPIClientService extends WakefulIntentService {
         INSERT_COMMENT,
         ADMIN_EMPLOYEE_DATA_BY_ADMIN_ID,
         CHANGE_USER_PASSWORD,
-        UPDATE_REGISRATION
+        UPDATE_REGISRATION,
+        MESSAGE_REQUEST,
+        MESSAGE_LIST_BY_EMPID,
+        SENT_MESSAGE_DETAIL,
+        REQUEST_BY_EMP_EMAIL_ID_ADMIN
     }
 }

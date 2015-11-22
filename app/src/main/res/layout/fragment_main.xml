@@ -50,10 +50,40 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/main_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/reportLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="vertical"
+                android:padding="@dimen/keyline_1"
+                android:visibility="gone">
+
+                <FrameLayout
+                    android:id="@+id/box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/fragment_reporting_comment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="top"
+                        android:hint="Message"
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:maxLines="3"
+                        android:minLines="3"
+                        android:scrollbars="vertical"
+                        android:singleLine="false" />
+
+                </FrameLayout>
+            </LinearLayout>
 
             <ListView
                 android:id="@+id/list"

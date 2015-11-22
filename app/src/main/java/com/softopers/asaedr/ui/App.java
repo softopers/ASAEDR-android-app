@@ -28,6 +28,10 @@ public class App extends Application {
     public static final String INSERT_COMMENT = "INSERT_COMMENT";
     public static final String ADMIN_EMPLOYEE_DATA_BY_ADMIN_ID  = "ADMIN_EMPLOYEE_DATA_BY_ADMIN_ID";
     public static final String CHANGE_USER_PASSWORD  = "CHANGE_USER_PASSWORD";
+    public static final String MESSAGE_REQUEST  = "MESSAGE_REQUEST";
+    public static final String MESSAGE_LIST_BY_EMPID  = "MESSAGE_LIST_BY_EMPID";
+    public static final String SENT_MESSAGE_DETAIL  = "SENT_MESSAGE_DETAIL";
+    public static final String REQUEST_BY_EMP_EMAIL_ID_ADMIN = "REQUEST_BY_EMP_EMAIL_ID_ADMIN";
 
     private static final int DELAYED_MS = 750;
     public static Context context;

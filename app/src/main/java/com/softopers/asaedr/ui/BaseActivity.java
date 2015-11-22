@@ -35,7 +35,6 @@ import android.widget.TextView;
 
 import com.softopers.asaedr.R;
 import com.softopers.asaedr.ui.admin.employee.EmployeesActivity;
-import com.softopers.asaedr.ui.admin.message.MessageActivity;
 import com.softopers.asaedr.ui.admin.reporting.ReportsActivity;
 import com.softopers.asaedr.ui.user.MainActivity;
 import com.softopers.asaedr.util.LUtils;
@@ -56,11 +55,10 @@ public abstract class BaseActivity extends ActionBarActivity implements
     protected static final int NAVDRAWER_ITEM_REPORTING = 0;
     protected static final int NAVDRAWER_ITEM_MESSAGES = 1;
     protected static final int NAVDRAWER_ITEM_REPORTS = 2;
-    protected static final int NAVDRAWER_ITEM_ADMIN_MESSAGES = 3;
-    protected static final int NAVDRAWER_ITEM_EMPLOYEES = 4;
-    protected static final int NAVDRAWER_ITEM_CHANGE_PASSWORD = 5;
-    protected static final int NAVDRAWER_ITEM_LOGOUT = 6;
-    protected static final int NAVDRAWER_ITEM_CONTACT_US = 7;
+    protected static final int NAVDRAWER_ITEM_EMPLOYEES = 3;
+    protected static final int NAVDRAWER_ITEM_CHANGE_PASSWORD = 4;
+    protected static final int NAVDRAWER_ITEM_LOGOUT = 5;
+    protected static final int NAVDRAWER_ITEM_CONTACT_US = 6;
     protected static final int NAVDRAWER_ITEM_INVALID = -1;
     protected static final int NAVDRAWER_ITEM_SEPARATOR = -2;
     protected static final int NAVDRAWER_ITEM_SEPARATOR_SPECIAL = -3;
@@ -70,7 +68,6 @@ public abstract class BaseActivity extends ActionBarActivity implements
             R.string.navdrawer_item_reporting,
             R.string.navdrawer_item_messages,
             R.string.navdrawer_item_reports,
-            R.string.navdrawer_item_messages,
             R.string.navdrawer_item_employees,
             R.string.navdrawer_item_settings,
             R.string.navdrawer_item_logout,
@@ -83,7 +80,6 @@ public abstract class BaseActivity extends ActionBarActivity implements
             R.drawable.ic_drawer_add_report, // Reporting
             R.drawable.ic_drawer_messages, // Messages
             R.drawable.ic_drawer_reports, // Reports
-            R.drawable.ic_drawer_messages, // Admin Messages
             R.drawable.ic_drawer_employees, // Employees
             R.drawable.ic_drawer_settings, // Profile
             R.drawable.ic_drawer_logout, // Logout
@@ -305,7 +301,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
             mNavDrawerItems.add(NAVDRAWER_ITEM_MESSAGES);
         } else {
             mNavDrawerItems.add(NAVDRAWER_ITEM_REPORTS);
-            mNavDrawerItems.add(NAVDRAWER_ITEM_ADMIN_MESSAGES);
+            mNavDrawerItems.add(NAVDRAWER_ITEM_MESSAGES);
             mNavDrawerItems.add(NAVDRAWER_ITEM_EMPLOYEES);
         }
         mNavDrawerItems.add(NAVDRAWER_ITEM_SEPARATOR_SPECIAL);
@@ -385,17 +381,17 @@ public abstract class BaseActivity extends ActionBarActivity implements
                 finish();
                 break;
             case NAVDRAWER_ITEM_MESSAGES:
-                intent = new Intent(this, MainActivity.class);
+                intent = new Intent(this, MessageListActivity.class);
+                if(PrefUtils.getUser(getApplicationContext()).getIsAdmin()){
+                    intent.putExtra("admin", "admin");
+                } else {
+                    intent.putExtra("user", "user");
+                }
                 startActivity(intent);
                 finish();
                 break;
             case NAVDRAWER_ITEM_REPORTS:
                 intent = new Intent(this, ReportsActivity.class);
-                startActivity(intent);
-                finish();
-                break;
-            case NAVDRAWER_ITEM_ADMIN_MESSAGES:
-                intent = new Intent(this, MessageActivity.class);
                 startActivity(intent);
                 finish();
                 break;

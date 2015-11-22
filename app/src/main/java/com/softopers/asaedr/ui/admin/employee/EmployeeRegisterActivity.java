@@ -430,7 +430,8 @@ public class EmployeeRegisterActivity extends BaseActivity {
                 user.setUserName(username);
                 user.setPassword(password);
                 User user1 = new User(user);
-                employeeRegisterIntent.putExtra(RestAPIClientService.Operation.class.getName(), RestAPIClientService.Operation.UPDATE_REGISRATION);
+                employeeRegisterIntent.putExtra(RestAPIClientService.Operation.class.getName(), RestAPIClientService.Operation.
+                        UPDATE_REGISRATION);
                 employeeRegisterIntent.putExtra(App.USER, user1);
                 WakefulIntentService.sendWakefulWork(EmployeeRegisterActivity.this, employeeRegisterIntent);
             } else {

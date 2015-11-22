@@ -1,6 +1,8 @@
 package com.softopers.asaedr.model;
 
-public class EmpMessageList {
+import java.io.Serializable;
+
+public class EmpMessageList implements Serializable {
     private String EmpId;
 
     public String getEmpId() {

@@ -4,10 +4,14 @@ import com.softopers.asaedr.model.AdminEmployeeList;
 import com.softopers.asaedr.model.ChangePasswordRequset;
 import com.softopers.asaedr.model.EmployeeRegistrationDetail;
 import com.softopers.asaedr.model.LoginDetail;
+import com.softopers.asaedr.model.MessageListResponse;
+import com.softopers.asaedr.model.MessageRequest;
 import com.softopers.asaedr.model.Report;
 import com.softopers.asaedr.model.RequestByIds;
+import com.softopers.asaedr.model.ResponseMessage;
 import com.softopers.asaedr.model.ResponseReportingList;
 import com.softopers.asaedr.model.ResponseResult;
+import com.softopers.asaedr.model.ResponseSentMessageDetail;
 import com.softopers.asaedr.model.TemplateList;
 import com.softopers.asaedr.model.TemplateMaster;
 import com.softopers.asaedr.model.User;
@@ -72,4 +76,16 @@ public interface AssaService {
 
     @POST("/UpdateRegistration")
     ResponseResult updateRegistration(@Body User user);
+
+    @POST("/SendMessage")
+    ResponseMessage sendMessage(@Body MessageRequest messageRequest);
+
+    @POST("/MessageListByEmpId")
+    MessageListResponse messageListByEmpId(@Body RequestByIds requestByIds);
+
+    @POST("/SentMessageDetail")
+    ResponseSentMessageDetail sentMessageDetail(@Body RequestByIds requestByIds);
+
+    @POST("/AdminEmployeeDataByAdminIdForMessage")
+    AdminEmployeeList adminEmployeeDataByAdminIdForMessage(@Body RequestByIds requestByIds);
 }

@@ -19,6 +19,8 @@ public class RequestByIds implements Serializable {
 
     private String Comment;
 
+    private String MessageId;
+
     public String getDate() {
         return Date;
     }
@@ -65,5 +67,26 @@ public class RequestByIds implements Serializable {
 
     public void setComment(String comment) {
         Comment = comment;
+    }
+
+    public String getMessageId() {
+        return MessageId;
+    }
+
+    public void setMessageId(String messageId) {
+        MessageId = messageId;
+    }
+
+    @Override
+    public String toString() {
+        return "RequestByIds{" +
+                "EmpId='" + EmpId + '\'' +
+                ", AdminId='" + AdminId + '\'' +
+                ", PageNumber=" + PageNumber +
+                ", DayStatusId=" + DayStatusId +
+                ", Date='" + Date + '\'' +
+                ", Comment='" + Comment + '\'' +
+                ", MessageId='" + MessageId + '\'' +
+                '}';
     }
 }

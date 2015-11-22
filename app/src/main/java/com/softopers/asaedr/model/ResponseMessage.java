@@ -1,6 +1,6 @@
 package com.softopers.asaedr.model;
 
-public class MyPojo {
+public class ResponseMessage {
     private String Status;
 
     private String Result;
@@ -13,7 +13,7 @@ public class MyPojo {
 
     @Override
     public String toString() {
-        return "MyPojo{" +
+        return "ResponseMessage{" +
                 "Status='" + Status + '\'' +
                 ", Result='" + Result + '\'' +
                 ", Version='" + Version + '\'' +
