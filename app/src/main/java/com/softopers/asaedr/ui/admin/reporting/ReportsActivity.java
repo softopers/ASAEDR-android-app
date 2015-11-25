@@ -100,11 +100,6 @@ public class ReportsActivity extends BaseActivity {
     }
 
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
     private class OurViewPagerAdapter extends FragmentPagerAdapter {
 
         final int PAGE_COUNT = 2;

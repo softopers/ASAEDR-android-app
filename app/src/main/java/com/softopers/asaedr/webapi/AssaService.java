@@ -8,6 +8,7 @@ import com.softopers.asaedr.model.MessageListResponse;
 import com.softopers.asaedr.model.MessageRequest;
 import com.softopers.asaedr.model.Report;
 import com.softopers.asaedr.model.RequestByIds;
+import com.softopers.asaedr.model.ResponseLogout;
 import com.softopers.asaedr.model.ResponseMessage;
 import com.softopers.asaedr.model.ResponseReportingList;
 import com.softopers.asaedr.model.ResponseResult;
@@ -88,4 +89,7 @@ public interface AssaService {
 
     @POST("/AdminEmployeeDataByAdminIdForMessage")
     AdminEmployeeList adminEmployeeDataByAdminIdForMessage(@Body RequestByIds requestByIds);
+
+    @POST("/Logout")
+    ResponseLogout logout(@Body RequestByIds requestByIds);
 }

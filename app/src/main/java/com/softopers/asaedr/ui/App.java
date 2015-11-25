@@ -32,6 +32,7 @@ public class App extends Application {
     public static final String MESSAGE_LIST_BY_EMPID  = "MESSAGE_LIST_BY_EMPID";
     public static final String SENT_MESSAGE_DETAIL  = "SENT_MESSAGE_DETAIL";
     public static final String REQUEST_BY_EMP_EMAIL_ID_ADMIN = "REQUEST_BY_EMP_EMAIL_ID_ADMIN";
+    public static final String LOGOUT = "LOGOUT";
 
     private static final int DELAYED_MS = 750;
     public static Context context;

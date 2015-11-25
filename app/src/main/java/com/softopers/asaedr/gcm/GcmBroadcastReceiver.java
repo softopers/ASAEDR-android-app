@@ -17,9 +17,8 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.softopers.asaedr.R;
 import com.softopers.asaedr.model.notification;
+import com.softopers.asaedr.ui.MessageListActivity;
 import com.softopers.asaedr.ui.user.ReportingActivity;
-
-import java.util.Random;
 
 public class GcmBroadcastReceiver extends BroadcastReceiver {
 
@@ -27,38 +26,62 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 
     private static void generateNotification(Context context, notification message) {
 
-        NotificationManager notificationManager = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
-        int notificationId = new Random().nextInt();
-        Notification notification = new Notification();
-        Intent notificationIntent = new Intent(context, ReportingActivity.class);
-        // set intent so it does not start a new activity
+//        int notificationId = new Random().nextInt();
 
-        notificationIntent.putExtra("comment", true);
-        notificationIntent.putExtra("DayStatusId", message.getDayStatusId());
-        notificationIntent.putExtra("date", message.getDate());
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent intent =
-                PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT );
-        Notification.Builder builder = new Notification.Builder(context);
-        builder.setContentTitle(context.getString(R.string.app_name));
-        builder.setContentText(message.getAdminName() + " commented on " + message.getDate());
-        builder.setSmallIcon(R.mipmap.ic_launcher);
-        builder.setContentIntent(intent);
-        builder.setAutoCancel(true);
-        builder.setOngoing(true);
+        if(message.getNotificationType().equalsIgnoreCase("Message")){
+            NotificationManager notificationManager = (NotificationManager)
+                    context.getSystemService(Context.NOTIFICATION_SERVICE);
+            Notification notification = new Notification();
 
-//        // Play default notification sound
-//        notification.defaults |= Notification.DEFAULT_SOUND;
-//
-//        // Vibrate if vibrate is enabled
-//        notification.defaults |= Notification.DEFAULT_VIBRATE;
-//
-        notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
+            Notification.Builder builder = new Notification.Builder(context);
 
-        notification = builder.getNotification();
-        notificationManager.notify(0, notification);
+            Intent notificationIntent = new Intent(context, MessageListActivity.class);
+            // set intent so it does not start a new activity
+            notificationIntent.putExtra("message", true);
+            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent intent =
+                    PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT );
+
+            builder.setContentTitle(context.getString(R.string.app_name));
+            builder.setContentText(message.getAdminName() + " messaged");
+            builder.setSmallIcon(R.mipmap.ic_launcher);
+            builder.setContentIntent(intent);
+            builder.setAutoCancel(true);
+            builder.setOngoing(true);
+            notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
+
+            notification = builder.getNotification();
+            notificationManager.notify(0, notification);
+        } else {
+            NotificationManager notificationManager = (NotificationManager)
+                    context.getSystemService(Context.NOTIFICATION_SERVICE);
+            Notification notification = new Notification();
+
+            Notification.Builder builder = new Notification.Builder(context);
+
+            Intent notificationIntent = new Intent(context, ReportingActivity.class);
+            // set intent so it does not start a new activity
+
+            notificationIntent.putExtra("comment", true);
+            notificationIntent.putExtra("DayStatusId", message.getDayStatusId());
+            notificationIntent.putExtra("date", message.getDate());
+            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent intent =
+                    PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT );
+
+            builder.setContentTitle(context.getString(R.string.app_name));
+            builder.setContentText(message.getAdminName() + " commented on " + message.getDate());
+            builder.setSmallIcon(R.mipmap.ic_launcher);
+            builder.setContentIntent(intent);
+            builder.setAutoCancel(true);
+            builder.setOngoing(true);
+            notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
+
+            notification = builder.getNotification();
+            notificationManager.notify(1, notification);
+        }
 
         try {
             Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

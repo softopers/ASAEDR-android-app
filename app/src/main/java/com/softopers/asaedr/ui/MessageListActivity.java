@@ -1,5 +1,7 @@
 package com.softopers.asaedr.ui;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,8 +24,9 @@ public class MessageListActivity extends BaseActivity {
         }
 
         setContentView(R.layout.activity_main);
+        if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getBoolean("message")) {
 
-        if (null == savedInstanceState) {
+        } else {
             MessageListFragment messageListFragment = new MessageListFragment();
             Bundle bundle = new Bundle();
             messageListFragment.setArguments(bundle);
@@ -63,5 +66,21 @@ public class MessageListActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getBoolean("message")) {
+            String ns = Context.NOTIFICATION_SERVICE;
+            NotificationManager nMgr = (NotificationManager) getApplicationContext().getSystemService(ns);
+            nMgr.cancel(0);
+            MessageListFragment messageListFragment = new MessageListFragment();
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, messageListFragment)
+                    .commit();
+            getIntent().removeExtra("message");
+        }
     }
 }

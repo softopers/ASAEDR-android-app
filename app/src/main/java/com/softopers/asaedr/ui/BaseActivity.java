@@ -32,8 +32,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.commonsware.cwac.wakeful.WakefulIntentService;
 import com.softopers.asaedr.R;
+import com.softopers.asaedr.model.RequestByIds;
+import com.softopers.asaedr.model.ResponseLogout;
 import com.softopers.asaedr.ui.admin.employee.EmployeesActivity;
 import com.softopers.asaedr.ui.admin.reporting.ReportsActivity;
 import com.softopers.asaedr.ui.user.MainActivity;
@@ -42,10 +46,13 @@ import com.softopers.asaedr.util.PlayServicesUtils;
 import com.softopers.asaedr.util.PrefUtils;
 import com.softopers.asaedr.util.RecentTasksStyler;
 import com.softopers.asaedr.util.UIUtils;
+import com.softopers.asaedr.webapi.RestAPIClientService;
 import com.softopers.asaedr.widget.ScrimInsetsScrollView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import de.greenrobot.event.EventBus;
 
 public abstract class BaseActivity extends ActionBarActivity implements
         SharedPreferences.OnSharedPreferenceChangeListener {
@@ -91,6 +98,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
     // different Activities of the app through the Nav Drawer
     private static final int MAIN_CONTENT_FADEOUT_DURATION = 150;
     private static final int MAIN_CONTENT_FADEIN_DURATION = 250;
+    boolean doubleBackToExitPressedOnce = false;
     // Navigation drawer:
     private DrawerLayout mDrawerLayout;
     private Handler mHandler;
@@ -316,6 +324,22 @@ public abstract class BaseActivity extends ActionBarActivity implements
     public void onBackPressed() {
         if (isNavDrawerOpen()) {
             closeNavDrawer();
+        } else if (getSelfNavDrawerItem() != NAVDRAWER_ITEM_INVALID) {
+            if (doubleBackToExitPressedOnce) {
+                super.onBackPressed();
+                return;
+            }
+
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 2000);
         } else {
             super.onBackPressed();
         }
@@ -382,7 +406,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
                 break;
             case NAVDRAWER_ITEM_MESSAGES:
                 intent = new Intent(this, MessageListActivity.class);
-                if(PrefUtils.getUser(getApplicationContext()).getIsAdmin()){
+                if (PrefUtils.getUser(getApplicationContext()).getIsAdmin()) {
                     intent.putExtra("admin", "admin");
                 } else {
                     intent.putExtra("user", "user");
@@ -406,9 +430,20 @@ public abstract class BaseActivity extends ActionBarActivity implements
                 finish();
                 break;
             case NAVDRAWER_ITEM_LOGOUT:
-                PrefUtils.clearPref(this);
-                PrefUtils.markTosAccepted(this);
-                intent = new Intent(this, LoginActivity.class);
+
+                if (!EventBus.getDefault().isRegistered(this))
+                    EventBus.getDefault().register(this);
+
+                Intent employeeRegisterIntent = new Intent(getApplicationContext(), RestAPIClientService.class);
+                RequestByIds requestByIds = new RequestByIds();
+                requestByIds.setEmpId(PrefUtils.getUser(getApplicationContext()).getEmpId());
+                employeeRegisterIntent.putExtra(RestAPIClientService.Operation.class.getName(), RestAPIClientService.Operation.LOGOUT);
+                employeeRegisterIntent.putExtra(App.LOGOUT, requestByIds);
+                WakefulIntentService.sendWakefulWork(getApplicationContext(), employeeRegisterIntent);
+
+                PrefUtils.clearPref(getApplicationContext());
+                PrefUtils.markTosAccepted(getApplicationContext());
+                intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
                 finish();
                 break;
@@ -418,6 +453,21 @@ public abstract class BaseActivity extends ActionBarActivity implements
                 finish();
                 break;
         }
+    }
+
+    public void onEvent(final ResponseLogout e) {
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                Log.v(TAG, e.getStatus());
+
+                if (EventBus.getDefault().isRegistered(this))
+                    EventBus.getDefault().unregister(this);
+
+                if (e.getStatus().equals("Success")) {
+                    Toast.makeText(getApplicationContext(), "Logged out Successfully", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void onNavDrawerItemClicked(final int itemId) {

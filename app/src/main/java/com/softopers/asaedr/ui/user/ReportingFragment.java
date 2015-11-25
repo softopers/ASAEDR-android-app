@@ -41,8 +41,6 @@ import com.softopers.asaedr.webapi.RestAPIClientService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import de.greenrobot.event.EventBus;
@@ -68,11 +66,6 @@ public class ReportingFragment extends Fragment implements AbsListView.OnScrollL
     private boolean mIsLoadingMore = false;
     private Spinner employee_school;
     private Integer schoolId;
-    private Date date;
-    private Date dateCompareOne;
-    private Date dateCompareTwo;
-    private String compareStringOne = "9:00";
-    private String compareStringTwo = "19:00";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -96,18 +89,18 @@ public class ReportingFragment extends Fragment implements AbsListView.OnScrollL
 
         fragment_reporting_list_view.setOnScrollListener(this);
 
-        if (getArguments().getBoolean("isLock")) {
+        if (getArguments().getBoolean("isLock") || getArguments().getString("noti") != null) {
             reportLinear.setVisibility(View.GONE);
+        } else {
+            reportLinear.setVisibility(View.VISIBLE);
         }
-
-        compareDates();
 
         mLoadingView = root.findViewById(R.id.fragment_reporting_progress);
         mainLinear = (LinearLayout) root.findViewById(R.id.mainLinear);
 
         fragment_reporting_comment = (EditText) root.findViewById(R.id.fragment_reporting_comment);
 
-        if(PrefUtils.getUser(getActivity()).getIsShowSchool()){
+        if (PrefUtils.getUser(getActivity()).getIsShowSchool()) {
             LinearLayout header1 = (LinearLayout) root.findViewById(R.id.header1);
             header1.setVisibility(View.VISIBLE);
             employee_school = (Spinner) root.findViewById(R.id.employee_school);
@@ -120,7 +113,7 @@ public class ReportingFragment extends Fragment implements AbsListView.OnScrollL
                 employee_school.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                        School school= (School) adapterView.getAdapter().getItem(position);
+                        School school = (School) adapterView.getAdapter().getItem(position);
                         schoolId = school.getSchoolId();
                     }
 
@@ -212,7 +205,7 @@ public class ReportingFragment extends Fragment implements AbsListView.OnScrollL
                 Report report = new Report();
                 report.setContent(reporting.trim());
                 report.setDayStatusId(Integer.valueOf(getArguments().getString("DayStatusId")));
-                if(PrefUtils.getUser(getActivity()).getIsShowSchool()){
+                if (PrefUtils.getUser(getActivity()).getIsShowSchool()) {
                     report.setSchoolId(schoolId);
                 }
                 Report report1 = new Report(report);
@@ -426,29 +419,5 @@ public class ReportingFragment extends Fragment implements AbsListView.OnScrollL
         super.onPause();
         if (EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().unregister(this);
-    }
-
-    private void compareDates(){
-        Calendar now = Calendar.getInstance();
-
-        int hour = now.get(Calendar.HOUR_OF_DAY);
-        int minute = now.get(Calendar.MINUTE);
-
-        date = parseDate(hour + ":" + minute);
-        dateCompareOne = parseDate(compareStringOne);
-        dateCompareTwo = parseDate(compareStringTwo);
-
-        if ( dateCompareOne.before( date ) && dateCompareTwo.after(date)) {
-            reportLinear.setVisibility(View.GONE);
-        }
-    }
-
-    private Date parseDate(String date) {
-
-        try {
-            return inputParser.parse(date);
-        } catch (java.text.ParseException e) {
-            return new Date(0);
-        }
     }
 }

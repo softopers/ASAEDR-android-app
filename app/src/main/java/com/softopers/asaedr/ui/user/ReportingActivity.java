@@ -78,12 +78,13 @@ public class ReportingActivity extends BaseActivity {
         if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getBoolean("comment")) {
             String ns = Context.NOTIFICATION_SERVICE;
             NotificationManager nMgr = (NotificationManager) getApplicationContext().getSystemService(ns);
-            nMgr.cancelAll();
+            nMgr.cancel(1);
             String id = getIntent().getExtras().getString("DayStatusId");
             Log.v("id", String.valueOf(id));
             ReportingFragment reportingFragment = new ReportingFragment();
             Bundle bundle = new Bundle();
             bundle.putString("DayStatusId", id);
+            bundle.putString("noti", "noti");
             reportingFragment.setArguments(bundle);
 
             getSupportFragmentManager().beginTransaction()
@@ -93,9 +94,4 @@ public class ReportingActivity extends BaseActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        
-    }
 }

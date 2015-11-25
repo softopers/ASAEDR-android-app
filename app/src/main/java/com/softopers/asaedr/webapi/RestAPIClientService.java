@@ -17,6 +17,7 @@ import com.softopers.asaedr.model.MessageListResponse;
 import com.softopers.asaedr.model.MessageRequest;
 import com.softopers.asaedr.model.Report;
 import com.softopers.asaedr.model.RequestByIds;
+import com.softopers.asaedr.model.ResponseLogout;
 import com.softopers.asaedr.model.ResponseMessage;
 import com.softopers.asaedr.model.ResponseReportingList;
 import com.softopers.asaedr.model.ResponseResult;
@@ -222,6 +223,13 @@ public class RestAPIClientService extends WakefulIntentService {
             case REQUEST_BY_EMP_EMAIL_ID_ADMIN:
                 try {
                     adminEmployeeDataByAdminIdForMessage(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case LOGOUT:
+                try {
+                    logout(intent);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -484,6 +492,17 @@ public class RestAPIClientService extends WakefulIntentService {
         }
     }
 
+    private void logout(Intent intent) throws UnknownServiceException {
+        try {
+            RequestByIds requestByIds = (RequestByIds) intent.getSerializableExtra(App.LOGOUT);
+            ResponseLogout responseLogout = service.logout(requestByIds);
+            App.eventBus.post(responseLogout);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UnknownServiceException(e.getMessage());
+        }
+    }
+
     public enum Operation {
         LOGIN_USER,
         EMPLOYEE_REGISTRATION_DETAILS,
@@ -506,6 +525,7 @@ public class RestAPIClientService extends WakefulIntentService {
         MESSAGE_REQUEST,
         MESSAGE_LIST_BY_EMPID,
         SENT_MESSAGE_DETAIL,
-        REQUEST_BY_EMP_EMAIL_ID_ADMIN
+        REQUEST_BY_EMP_EMAIL_ID_ADMIN,
+        LOGOUT
     }
 }

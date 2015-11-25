@@ -10,6 +10,8 @@ public class notification {
 
     private String DayStatusId;
 
+    private String MessageContent;
+
     public String getDayStatusId() {
         return DayStatusId;
     }
@@ -42,6 +44,14 @@ public class notification {
         this.NotificationType = NotificationType;
     }
 
+    public String getMessageContent() {
+        return MessageContent;
+    }
+
+    public void setMessageContent(String messageContent) {
+        MessageContent = messageContent;
+    }
+
     @Override
     public String toString() {
         return "notification{" +
@@ -49,6 +59,7 @@ public class notification {
                 ", Date='" + Date + '\'' +
                 ", NotificationType='" + NotificationType + '\'' +
                 ", DayStatusId='" + DayStatusId + '\'' +
+                ", MessageContent='" + MessageContent + '\'' +
                 '}';
     }
 }

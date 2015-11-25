@@ -70,7 +70,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:autoLink="web"
-                            android:text="@string/hello_world"
+                            android:linksClickable="true"
+                            android:text="This app is property of All Sports Academy. To use this app you must be part of All Sports Academy. Use of this app is strictly prohibited without permission of All Sports Academy. All Copy Rights and License Rights belong to All Sports Academy and Softopers (App Manufacturer Company). If it is found that you are using this application without All Sports Academy’s Permission then legal actions according to IT ACT of Indian Constitution can be taken against you. For more information visit allsportsacademy.in OR softopers.in.\n\nBy accepting this, above terms and conditions automatically applies to you."
                             android:textColor="@color/body_text_2"
                             android:textSize="@dimen/text_size_medium" />
                     </LinearLayout>

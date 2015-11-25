@@ -7,7 +7,7 @@
 
     <string name="base_url">http://app.allsportsacademy.in/MyService.svc</string>
 
-    <string name="welcome_to_assa_app">Welcome to the All Sports Academy EDR app!</string>
+    <string name="welcome_to_assa_app">All Sports Academy EDR v1.0</string>
 
     <string name="welcome_text">Before we begin, here is some important legal information regarding your use of this app. This will only take a minute!</string>
 
