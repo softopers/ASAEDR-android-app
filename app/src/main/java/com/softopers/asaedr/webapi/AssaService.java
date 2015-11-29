@@ -3,11 +3,13 @@ package com.softopers.asaedr.webapi;
 import com.softopers.asaedr.model.AdminEmployeeList;
 import com.softopers.asaedr.model.ChangePasswordRequset;
 import com.softopers.asaedr.model.EmployeeRegistrationDetail;
+import com.softopers.asaedr.model.LockUnlock;
 import com.softopers.asaedr.model.LoginDetail;
 import com.softopers.asaedr.model.MessageListResponse;
 import com.softopers.asaedr.model.MessageRequest;
 import com.softopers.asaedr.model.Report;
 import com.softopers.asaedr.model.RequestByIds;
+import com.softopers.asaedr.model.ResponseLockUnlock;
 import com.softopers.asaedr.model.ResponseLogout;
 import com.softopers.asaedr.model.ResponseMessage;
 import com.softopers.asaedr.model.ResponseReportingList;
@@ -92,4 +94,22 @@ public interface AssaService {
 
     @POST("/Logout")
     ResponseLogout logout(@Body RequestByIds requestByIds);
+
+    @POST("/AdminUnLockDaysList")
+    UserDateWiseReport adminUnLockDaysList(@Body RequestByIds requestByIds);
+
+    @POST("/AdminLockDaysList")
+    UserDateWiseReport adminLockDaysList(@Body RequestByIds requestByIds);
+
+    @POST("/AdminUnLockDaysEmployeeList")
+    AdminEmployeeList adminUnLockDaysEmployeeList(@Body RequestByIds requestByIds);
+
+    @POST("/AdminLockDaysEmployeeList")
+    AdminEmployeeList adminLockDaysEmployeeList(@Body RequestByIds requestByIds);
+
+    @POST("/AdminUnLockDay")
+    ResponseLockUnlock adminUnLockDay(@Body LockUnlock lockUnlock);
+
+    @POST("/AdminLockDay")
+    ResponseLockUnlock adminLockDay(@Body LockUnlock lockUnlock);
 }

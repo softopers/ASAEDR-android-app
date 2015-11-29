@@ -244,7 +244,7 @@ public class LoginActivity extends Activity {
                 if (loginDetail.getStatus().equals("Success")) {
                     finish();
                     PrefUtils.markLoggedIn(LoginActivity.this);
-                    Intent loginIntent;
+                    Intent loginIntent = null;
                     if (loginDetail.getUser().getIsAdmin()) {
                         PrefUtils.setUserRole(getApplicationContext(), App.ADMIN);
                         loginIntent = new Intent(LoginActivity.this, ReportsActivity.class);

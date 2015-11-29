@@ -16,6 +16,8 @@
 
 package com.softopers.asaedr.ui;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
@@ -36,8 +38,10 @@ import android.widget.Toast;
 
 import com.commonsware.cwac.wakeful.WakefulIntentService;
 import com.softopers.asaedr.R;
+import com.softopers.asaedr.model.Privilage;
 import com.softopers.asaedr.model.RequestByIds;
 import com.softopers.asaedr.model.ResponseLogout;
+import com.softopers.asaedr.ui.admin.days.DaysActivity;
 import com.softopers.asaedr.ui.admin.employee.EmployeesActivity;
 import com.softopers.asaedr.ui.admin.reporting.ReportsActivity;
 import com.softopers.asaedr.ui.user.MainActivity;
@@ -65,6 +69,8 @@ public abstract class BaseActivity extends ActionBarActivity implements
     protected static final int NAVDRAWER_ITEM_CHANGE_PASSWORD = 4;
     protected static final int NAVDRAWER_ITEM_LOGOUT = 5;
     protected static final int NAVDRAWER_ITEM_CONTACT_US = 6;
+    protected static final int NAVDRAWER_ITEM_UNLOCK_DAYS = 7;
+    protected static final int NAVDRAWER_ITEM_LOCK_DAYS = 8;
     protected static final int NAVDRAWER_ITEM_INVALID = -1;
     protected static final int NAVDRAWER_ITEM_SEPARATOR = -2;
     protected static final int NAVDRAWER_ITEM_SEPARATOR_SPECIAL = -3;
@@ -78,7 +84,8 @@ public abstract class BaseActivity extends ActionBarActivity implements
             R.string.navdrawer_item_settings,
             R.string.navdrawer_item_logout,
             R.string.navdrawer_item_contact_us,
-
+            R.string.navdrawer_item_unlock,
+            R.string.navdrawer_item_lock
 
     };
     // icons for navdrawer items (indices must correspond to above array)
@@ -90,6 +97,8 @@ public abstract class BaseActivity extends ActionBarActivity implements
             R.drawable.ic_drawer_settings, // Profile
             R.drawable.ic_drawer_logout, // Logout
             R.drawable.ic_drawer_contact_us, // Contact Us
+            R.drawable.ic_drawer_unlock,
+            R.drawable.ic_drawer_lock
     };
     // delay to launch nav drawer item, to allow close animation to play
     private static final int NAVDRAWER_LAUNCH_DELAY = 250;
@@ -98,6 +107,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
     private static final int MAIN_CONTENT_FADEOUT_DURATION = 150;
     private static final int MAIN_CONTENT_FADEIN_DURATION = 250;
     boolean doubleBackToExitPressedOnce = false;
+    ArrayList<Privilage> privilages;
     // Navigation drawer:
     private DrawerLayout mDrawerLayout;
     private Handler mHandler;
@@ -310,6 +320,14 @@ public abstract class BaseActivity extends ActionBarActivity implements
             mNavDrawerItems.add(NAVDRAWER_ITEM_REPORTS);
             mNavDrawerItems.add(NAVDRAWER_ITEM_MESSAGES);
             mNavDrawerItems.add(NAVDRAWER_ITEM_EMPLOYEES);
+            Log.v("privilages", privilages + "=-=-=-=-==-=-=-=-=-=");
+            for (int i = 0; i < privilages.size(); i++) {
+                if (privilages.get(i).getName().contains("Access to Lock/Unlock Days") && privilages.get(i).getValue()) {
+                    mNavDrawerItems.add(NAVDRAWER_ITEM_SEPARATOR_SPECIAL);
+                    mNavDrawerItems.add(NAVDRAWER_ITEM_UNLOCK_DAYS);
+                    mNavDrawerItems.add(NAVDRAWER_ITEM_LOCK_DAYS);
+                }
+            }
         }
         mNavDrawerItems.add(NAVDRAWER_ITEM_SEPARATOR_SPECIAL);
         mNavDrawerItems.add(NAVDRAWER_ITEM_CHANGE_PASSWORD);
@@ -384,6 +402,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        privilages = PrefUtils.getUser(getApplicationContext()).getPrivilage();
         setupNavDrawer();
 
         View mainContent = findViewById(R.id.main_content);
@@ -453,6 +472,19 @@ public abstract class BaseActivity extends ActionBarActivity implements
                 startActivity(intent);
                 finish();
                 break;
+            case NAVDRAWER_ITEM_UNLOCK_DAYS:
+                intent = new Intent(this, DaysActivity.class);
+                intent.putExtra("unlock", "unlock");
+                startActivity(intent);
+                finish();
+                break;
+            case NAVDRAWER_ITEM_LOCK_DAYS:
+                intent = new Intent(this, DaysActivity.class);
+                intent.putExtra("lock", "lock");
+                startActivity(intent);
+                finish();
+                break;
+
         }
     }
 
@@ -506,6 +538,14 @@ public abstract class BaseActivity extends ActionBarActivity implements
 
         // Verifies the proper version of Google Play Services exists on the device.
 //        PlayServicesUtils.checkGooglePlaySevices(this);
+
+
+        if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().getBoolean("endday")) {
+            String ns = Context.NOTIFICATION_SERVICE;
+            NotificationManager nMgr = (NotificationManager) getApplicationContext().getSystemService(ns);
+            nMgr.cancel(2);
+            getIntent().removeExtra("endday");
+        }
     }
 
     @Override

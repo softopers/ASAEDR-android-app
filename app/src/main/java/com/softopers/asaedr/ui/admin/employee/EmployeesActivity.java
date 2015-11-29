@@ -65,6 +65,7 @@ public class EmployeesActivity extends BaseActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add_new) {
             Intent employeeRegisterIntent = new Intent(this, EmployeeRegisterActivity.class);
+            employeeRegisterIntent.putExtra("employees", privilages);
             startActivity(employeeRegisterIntent);
             return true;
         }

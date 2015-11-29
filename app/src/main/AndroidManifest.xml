@@ -42,7 +42,8 @@
         <activity
             android:name=".ui.user.MainActivity"
             android:configChanges="screenSize|orientation"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -54,77 +55,104 @@
             android:name="com.softopers.asaedr.ui.LoginActivity"
             android:configChanges="screenSize|orientation"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.IOSched"
             android:windowSoftInputMode="adjustResize|stateVisible" />
 
         <activity
             android:name="com.softopers.asaedr.ui.WelcomeActivity"
             android:configChanges="screenSize|orientation"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.admin.reporting.ReportsActivity"
             android:configChanges="screenSize|orientation"
-            android:label="@string/navdrawer_item_reports" />
+            android:label="@string/navdrawer_item_reports"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.admin.employee.EmployeesActivity"
             android:configChanges="screenSize|orientation"
-            android:label="@string/navdrawer_item_employees" />
+            android:label="@string/navdrawer_item_employees"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.admin.employee.EmployeeRegisterActivity"
             android:configChanges="screenSize|orientation"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.user.ReportingActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.user.TemplateActivity"
             android:configChanges="screenSize|orientation"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.admin.reporting.report_employee_date.AfterReportsActivity"
             android:configChanges="screenSize|orientation"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.admin.reporting.DetailReportsEmpDateActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.user.AddTemplateActivity"
             android:configChanges="screenSize|orientation"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.admin.reporting.report_date_employee.EmployeeReportsByDateActivity"
             android:configChanges="screenSize|orientation"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.ChangePasswordActivity"
             android:configChanges="screenSize|orientation"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.admin.message.MessageActivity"
             android:configChanges="screenSize|orientation"
             android:label="@string/navdrawer_item_messages"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".ui.MessageListActivity"
             android:configChanges="screenSize|orientation"
-            android:label="@string/navdrawer_item_messages" />
+            android:label="@string/navdrawer_item_messages"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.admin.message.SentMessageActivity"
             android:configChanges="screenSize|orientation"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.admin.days.DaysActivity"
+            android:configChanges="screenSize|orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.admin.days.DaysEmployeesActivity"
+            android:configChanges="screenSize|orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
 
         <service android:name="com.softopers.asaedr.webapi.RestAPIClientService" />
 

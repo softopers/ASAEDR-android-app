@@ -30,6 +30,8 @@
     <string name="navdrawer_item_contact_us">CONTACT US</string>
     <string name="navdrawer_item_reports">REPORTS</string>
     <string name="navdrawer_item_employees">EMPLOYEES</string>
+    <string name="navdrawer_item_lock">LOCK DAYS</string>
+    <string name="navdrawer_item_unlock">UNLOCK DAYS</string>
 
     <string name="employee_register_submitlink">Submit</string>
 

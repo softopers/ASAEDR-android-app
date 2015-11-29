@@ -17,6 +17,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.softopers.asaedr.R;
 import com.softopers.asaedr.model.notification;
+import com.softopers.asaedr.ui.BaseActivity;
 import com.softopers.asaedr.ui.MessageListActivity;
 import com.softopers.asaedr.ui.user.ReportingActivity;
 
@@ -28,7 +29,7 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 
 //        int notificationId = new Random().nextInt();
 
-        if(message.getNotificationType().equalsIgnoreCase("Message")){
+        if (message.getNotificationType().equalsIgnoreCase("Message")) {
             NotificationManager notificationManager = (NotificationManager)
                     context.getSystemService(Context.NOTIFICATION_SERVICE);
             Notification notification = new Notification();
@@ -41,7 +42,7 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
             notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                     Intent.FLAG_ACTIVITY_SINGLE_TOP);
             PendingIntent intent =
-                    PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT );
+                    PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
             builder.setContentTitle(context.getString(R.string.app_name));
             builder.setContentText(message.getAdminName() + " messaged");
@@ -53,6 +54,32 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 
             notification = builder.getNotification();
             notificationManager.notify(0, notification);
+        } else if (message.getNotificationType().equalsIgnoreCase("EndDay")) {
+            NotificationManager notificationManager = (NotificationManager)
+                    context.getSystemService(Context.NOTIFICATION_SERVICE);
+            Notification notification = new Notification();
+
+            Notification.Builder builder = new Notification.Builder(context);
+
+            Intent notificationIntent = new Intent(context, BaseActivity.class);
+            // set intent so it does not start a new activity
+
+            notificationIntent.putExtra("endday", true);
+            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent intent =
+                    PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+            builder.setContentTitle(context.getString(R.string.app_name));
+            builder.setContentText(message.getMessageContent());
+            builder.setSmallIcon(R.mipmap.ic_launcher);
+            builder.setContentIntent(intent);
+            builder.setAutoCancel(true);
+            builder.setOngoing(true);
+            notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
+
+            notification = builder.getNotification();
+            notificationManager.notify(2, notification);
         } else {
             NotificationManager notificationManager = (NotificationManager)
                     context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -69,7 +96,7 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
             notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                     Intent.FLAG_ACTIVITY_SINGLE_TOP);
             PendingIntent intent =
-                    PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT );
+                    PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
             builder.setContentTitle(context.getString(R.string.app_name));
             builder.setContentText(message.getAdminName() + " commented on " + message.getDate());

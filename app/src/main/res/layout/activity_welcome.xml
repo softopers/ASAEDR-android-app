@@ -17,7 +17,7 @@
             android:layout_height="100dp"
             android:layout_gravity="center|top"
             android:scaleType="fitCenter"
-            android:src="@drawable/io2014_logo"
+            android:src="@drawable/ic_welcome"
             android:tint="#7000" />
 
         <ScrollView

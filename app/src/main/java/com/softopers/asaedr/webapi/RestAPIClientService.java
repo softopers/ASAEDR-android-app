@@ -12,11 +12,13 @@ import com.softopers.asaedr.R;
 import com.softopers.asaedr.model.AdminEmployeeList;
 import com.softopers.asaedr.model.ChangePasswordRequset;
 import com.softopers.asaedr.model.EmployeeRegistrationDetail;
+import com.softopers.asaedr.model.LockUnlock;
 import com.softopers.asaedr.model.LoginDetail;
 import com.softopers.asaedr.model.MessageListResponse;
 import com.softopers.asaedr.model.MessageRequest;
 import com.softopers.asaedr.model.Report;
 import com.softopers.asaedr.model.RequestByIds;
+import com.softopers.asaedr.model.ResponseLockUnlock;
 import com.softopers.asaedr.model.ResponseLogout;
 import com.softopers.asaedr.model.ResponseMessage;
 import com.softopers.asaedr.model.ResponseReportingList;
@@ -230,6 +232,48 @@ public class RestAPIClientService extends WakefulIntentService {
             case LOGOUT:
                 try {
                     logout(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case DAYS_UNLOCK:
+                try {
+                    adminUnLockDaysList(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case DAYS_LOCK:
+                try {
+                    adminLockDaysList(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case DAYS_UNLOCK_EMPLOYEE:
+                try {
+                    adminUnLockDaysEmployeeList(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case DAYS_LOCK_EMPLOYEE:
+                try {
+                    adminLockDaysEmployeeList(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case UNLOCK_DAY:
+                try {
+                    adminUnLockDay(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case LOCK_DAY:
+                try {
+                    adminLockDay(intent);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -503,6 +547,72 @@ public class RestAPIClientService extends WakefulIntentService {
         }
     }
 
+    private void adminUnLockDaysList(Intent intent) throws UnknownServiceException {
+        try {
+            RequestByIds requestByIds = (RequestByIds) intent.getSerializableExtra(App.DAYS_UNLOCK);
+            UserDateWiseReport userDateWiseReport = service.adminUnLockDaysList(requestByIds);
+            App.eventBus.post(userDateWiseReport);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UnknownServiceException(e.getMessage());
+        }
+    }
+
+    private void adminLockDaysList(Intent intent) throws UnknownServiceException {
+        try {
+            RequestByIds requestByIds = (RequestByIds) intent.getSerializableExtra(App.DAYS_LOCK);
+            UserDateWiseReport userDateWiseReport = service.adminLockDaysList(requestByIds);
+            App.eventBus.post(userDateWiseReport);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UnknownServiceException(e.getMessage());
+        }
+    }
+
+    private void adminUnLockDaysEmployeeList(Intent intent) throws UnknownServiceException {
+        try {
+            RequestByIds requestByIds = (RequestByIds) intent.getSerializableExtra(App.DAYS_UNLOCK_EMPLOYEE);
+            AdminEmployeeList adminEmployeeList = service.adminUnLockDaysEmployeeList(requestByIds);
+            App.eventBus.post(adminEmployeeList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UnknownServiceException(e.getMessage());
+        }
+    }
+
+    private void adminLockDaysEmployeeList(Intent intent) throws UnknownServiceException {
+        try {
+            RequestByIds requestByIds = (RequestByIds) intent.getSerializableExtra(App.DAYS_LOCK_EMPLOYEE);
+            AdminEmployeeList adminEmployeeList = service.adminLockDaysEmployeeList(requestByIds);
+            App.eventBus.post(adminEmployeeList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UnknownServiceException(e.getMessage());
+        }
+    }
+
+    private void adminUnLockDay(Intent intent) throws UnknownServiceException {
+        try {
+            LockUnlock lockUnlock = (LockUnlock) intent.getSerializableExtra(App.UNLOCK_DAY);
+            ResponseLockUnlock responseResult = service.adminUnLockDay(lockUnlock);
+            App.eventBus.post(responseResult);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UnknownServiceException(e.getMessage());
+        }
+    }
+
+    private void adminLockDay(Intent intent) throws UnknownServiceException {
+        try {
+            LockUnlock lockUnlock = (LockUnlock) intent.getSerializableExtra(App.LOCK_DAY);
+            ResponseLockUnlock responseResult = service.adminLockDay(lockUnlock);
+            App.eventBus.post(responseResult);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UnknownServiceException(e.getMessage());
+        }
+    }
+
     public enum Operation {
         LOGIN_USER,
         EMPLOYEE_REGISTRATION_DETAILS,
@@ -526,6 +636,12 @@ public class RestAPIClientService extends WakefulIntentService {
         MESSAGE_LIST_BY_EMPID,
         SENT_MESSAGE_DETAIL,
         REQUEST_BY_EMP_EMAIL_ID_ADMIN,
-        LOGOUT
+        LOGOUT,
+        DAYS_UNLOCK,
+        DAYS_LOCK,
+        DAYS_UNLOCK_EMPLOYEE,
+        DAYS_LOCK_EMPLOYEE,
+        UNLOCK_DAY,
+        LOCK_DAY
     }
 }

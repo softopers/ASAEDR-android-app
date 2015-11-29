@@ -33,6 +33,12 @@ public class App extends Application {
     public static final String SENT_MESSAGE_DETAIL  = "SENT_MESSAGE_DETAIL";
     public static final String REQUEST_BY_EMP_EMAIL_ID_ADMIN = "REQUEST_BY_EMP_EMAIL_ID_ADMIN";
     public static final String LOGOUT = "LOGOUT";
+    public static final String DAYS_UNLOCK = "DAYS_UNLOCK";
+    public static final String DAYS_LOCK = "DAYS_LOCK";
+    public static final String DAYS_UNLOCK_EMPLOYEE = "DAYS_UNLOCK_EMPLOYEE";
+    public static final String DAYS_LOCK_EMPLOYEE = "DAYS_LOCK_EMPLOYEE";
+    public static final String UNLOCK_DAY = "UNLOCK_DAY";
+    public static final String LOCK_DAY = "LOCK_DAY";
 
     private static final int DELAYED_MS = 750;
     public static Context context;
