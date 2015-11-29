@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import com.commonsware.cwac.wakeful.WakefulIntentService;
 import com.softopers.asaedr.R;
 import com.softopers.asaedr.adapter.EmployeeReportingListAdapter;
+import com.softopers.asaedr.model.Privilage;
 import com.softopers.asaedr.model.ReportList;
 import com.softopers.asaedr.model.RequestByIds;
 import com.softopers.asaedr.model.ResponseReportingList;
@@ -31,6 +32,7 @@ import com.softopers.asaedr.model.ResponseResult;
 import com.softopers.asaedr.ui.App;
 import com.softopers.asaedr.ui.user.TemplateActivity;
 import com.softopers.asaedr.util.ConfigUtils;
+import com.softopers.asaedr.util.PrefUtils;
 import com.softopers.asaedr.webapi.RestAPIClientService;
 
 import java.util.ArrayList;
@@ -79,6 +81,13 @@ public class DetailReportsEmpDateFragment extends Fragment implements AbsListVie
 
         if (getArguments().getString("EmpId") != null) {
             reportLinear.setVisibility(View.GONE);
+        }
+
+        ArrayList<Privilage> privilages = PrefUtils.getUser(getActivity()).getPrivilage();
+        for (int i = 0; i < privilages.size(); i++) {
+            if (privilages.get(i).getName().contains("Access to Comment") && !privilages.get(i).getValue()) {
+                reportLinear.setVisibility(View.GONE);
+            }
         }
 
         fragment_reporting_comment = (EditText) root.findViewById(R.id.fragment_reporting_comment);

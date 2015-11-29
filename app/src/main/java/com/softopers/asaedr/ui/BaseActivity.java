@@ -42,7 +42,6 @@ import com.softopers.asaedr.ui.admin.employee.EmployeesActivity;
 import com.softopers.asaedr.ui.admin.reporting.ReportsActivity;
 import com.softopers.asaedr.ui.user.MainActivity;
 import com.softopers.asaedr.util.LUtils;
-import com.softopers.asaedr.util.PlayServicesUtils;
 import com.softopers.asaedr.util.PrefUtils;
 import com.softopers.asaedr.util.RecentTasksStyler;
 import com.softopers.asaedr.util.UIUtils;
@@ -407,6 +406,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
             case NAVDRAWER_ITEM_MESSAGES:
                 intent = new Intent(this, MessageListActivity.class);
                 if (PrefUtils.getUser(getApplicationContext()).getIsAdmin()) {
+                    intent.putExtra("privilages", PrefUtils.getUser(getApplicationContext()).getPrivilage());
                     intent.putExtra("admin", "admin");
                 } else {
                     intent.putExtra("user", "user");
@@ -421,6 +421,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
                 break;
             case NAVDRAWER_ITEM_EMPLOYEES:
                 intent = new Intent(this, EmployeesActivity.class);
+                intent.putExtra("employees", PrefUtils.getUser(getApplicationContext()).getPrivilage());
                 startActivity(intent);
                 finish();
                 break;
@@ -504,7 +505,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
         super.onResume();
 
         // Verifies the proper version of Google Play Services exists on the device.
-        PlayServicesUtils.checkGooglePlaySevices(this);
+//        PlayServicesUtils.checkGooglePlaySevices(this);
     }
 
     @Override

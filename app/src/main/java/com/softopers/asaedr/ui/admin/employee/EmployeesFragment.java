@@ -166,6 +166,7 @@ public class EmployeesFragment extends Fragment implements AbsListView.OnScrollL
                         UserList userList = (UserList) parent.getAdapter().getItem(position);
                         Intent intent = new Intent(getActivity(), EmployeeRegisterActivity.class);
                         intent.putExtra("userList", userList);
+                        intent.putExtra("employees", getArguments().getSerializable("employees"));
                         startActivity(intent);
                     }
                 });

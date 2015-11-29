@@ -32,6 +32,7 @@ import com.commonsware.cwac.wakeful.WakefulIntentService;
 import com.softopers.asaedr.R;
 import com.softopers.asaedr.model.DepartmentList;
 import com.softopers.asaedr.model.EmployeeRegistrationDetail;
+import com.softopers.asaedr.model.Privilage;
 import com.softopers.asaedr.model.PrivilegeCategoryList;
 import com.softopers.asaedr.model.ResponseResult;
 import com.softopers.asaedr.model.User;
@@ -46,6 +47,7 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import de.greenrobot.event.EventBus;
@@ -77,6 +79,7 @@ public class EmployeeRegisterActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee_register);
+        FrameLayout submit_button = (FrameLayout) findViewById(R.id.submit_button);
 
         employee_register_first_name = (EditText) findViewById(R.id.employee_register_first_name);
         employee_register_mobile_number = (EditText) findViewById(R.id.employee_register_mobile_number);
@@ -122,6 +125,7 @@ public class EmployeeRegisterActivity extends BaseActivity {
                 Picasso.with(getApplicationContext()).load("http://app.allsportsacademy.in/Image/" + userList.getImage()).placeholder(R.drawable.person_image_empty).error(R.drawable.person_image_empty).into(employee_register_image);
             else
                 employee_register_image.setImageResource(R.drawable.person_image_empty);
+
         } else {
             showProgress(true);
 
@@ -155,7 +159,14 @@ public class EmployeeRegisterActivity extends BaseActivity {
             });
         }
 
-        FrameLayout submit_button = (FrameLayout) findViewById(R.id.submit_button);
+
+        ArrayList<Privilage> privilages = (ArrayList<Privilage>) getIntent().getSerializableExtra("employees");
+        Log.v("privilages", privilages + "=-=-=-=-==-=-=-=-=-=");
+        for (int i = 0; i < privilages.size(); i++) {
+            if (privilages.get(i).getName().contains("Access to Update Employee") && !privilages.get(i).getValue()) {
+                submit_button.setVisibility(View.GONE);
+            }
+        }
 
         submit_button.setOnClickListener(new View.OnClickListener() {
             @Override

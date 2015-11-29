@@ -6,10 +6,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.softopers.asaedr.R;
+import com.softopers.asaedr.model.Privilage;
 import com.softopers.asaedr.ui.BaseActivity;
+
+import java.util.ArrayList;
 
 
 public class EmployeesActivity extends BaseActivity {
+
+    ArrayList<Privilage> privilages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,9 +26,15 @@ public class EmployeesActivity extends BaseActivity {
 
         setContentView(R.layout.activity_main);
 
+        privilages = (ArrayList<Privilage>) getIntent().getSerializableExtra("employees");
+
         if (null == savedInstanceState) {
+            EmployeesFragment employeesFragment = new EmployeesFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("employees", privilages);
+            employeesFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, EmployeesFragment.newInstance())
+                    .replace(R.id.container, employeesFragment)
                     .commit();
         }
     }
@@ -36,7 +47,11 @@ public class EmployeesActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add, menu);
+        for (int i = 0; i < privilages.size(); i++) {
+            if (privilages.get(i).getName().contains("Access to Add Employee") && privilages.get(i).getValue()) {
+                getMenuInflater().inflate(R.menu.menu_add, menu);
+            }
+        }
         return true;
     }
 

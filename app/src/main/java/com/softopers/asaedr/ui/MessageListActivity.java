@@ -8,7 +8,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.softopers.asaedr.R;
+import com.softopers.asaedr.model.Privilage;
 import com.softopers.asaedr.ui.admin.message.MessageActivity;
+
+import java.util.ArrayList;
 
 /**
  * Created by krunal on 17/11/15.
@@ -46,7 +49,12 @@ public class MessageListActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         if (getIntent().getStringExtra("admin") != null) {
-            getMenuInflater().inflate(R.menu.menu_add, menu);
+            ArrayList<Privilage> privilages = (ArrayList<Privilage>) getIntent().getSerializableExtra("privilages");
+            for (int i = 0; i < privilages.size(); i++) {
+                if (privilages.get(i).getName().contains("Access to Send Message") && privilages.get(i).getValue()) {
+                    getMenuInflater().inflate(R.menu.menu_add, menu);
+                }
+            }
         }
         return true;
     }

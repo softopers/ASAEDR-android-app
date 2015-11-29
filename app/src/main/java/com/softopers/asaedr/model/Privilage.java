@@ -1,10 +1,12 @@
 package com.softopers.asaedr.model;
 
-public class Privilage {
+import java.io.Serializable;
+
+public class Privilage implements Serializable {
 
     private String Name;
 
-    private String Value;
+    private boolean Value;
 
     public String getName() {
         return Name;
@@ -14,16 +16,19 @@ public class Privilage {
         this.Name = Name;
     }
 
-    public String getValue() {
+    public boolean getValue() {
         return Value;
     }
 
-    public void setValue(String Value) {
+    public void setValue(boolean Value) {
         this.Value = Value;
     }
 
     @Override
     public String toString() {
-        return "ClassPojo [Name = " + Name + ", Value = " + Value + "]";
+        return "Privilage{" +
+                "Name='" + Name + '\'' +
+                ", Value=" + Value +
+                '}';
     }
 }
