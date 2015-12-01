@@ -3,11 +3,14 @@ package com.softopers.asaedr.ui.user;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.crashlytics.android.Crashlytics;
 import com.softopers.asaedr.R;
 import com.softopers.asaedr.ui.App;
 import com.softopers.asaedr.ui.BaseActivity;
 import com.softopers.asaedr.ui.admin.reporting.ReportsActivity;
 import com.softopers.asaedr.util.PrefUtils;
+
+import io.fabric.sdk.android.Fabric;
 
 
 public class MainActivity extends BaseActivity {
@@ -15,6 +18,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
 
         if (isFinishing()) {
             return;

@@ -173,6 +173,9 @@
                 <category android:name="com.softopers.asaedr" />
             </intent-filter>
         </receiver>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="cd203287a2465d8fd9a319f4c4a79fdfe39d01f9" />
     </application>
 
 </manifest>
